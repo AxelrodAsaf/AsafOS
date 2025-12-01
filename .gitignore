@@ -3,3 +3,5 @@ credentials.json
 *.env
 recentSongs.json
 topArtists.json
+frontend/credentials.json
+backend/credentials.json
