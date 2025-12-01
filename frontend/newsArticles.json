@@ -1,0 +1,18 @@
+[
+  {
+    "title": "Article Title 1",
+    "description": "Article Description 1",
+    "link": "https://example.com/article1",
+    "pubDate": "2024-07-14T08:00:00Z",
+    "shortDescription": "Short description for Article 1",
+    "image": "https://example.com/article1/image.jpg"
+  },
+  {
+    "title": "Article Title 2",
+    "description": "Article Description 2",
+    "link": "https://example.com/article2",
+    "pubDate": "2024-07-14T09:00:00Z",
+    "shortDescription": "Short description for Article 2",
+    "image": "https://example.com/article2/image.jpg"
+  }
+]

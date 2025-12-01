@@ -1,0 +1,80 @@
+// Authorization token that must have been created previously. See : https://developer.spotify.com/documentation/web-api/concepts/authorization
+const token = 'BQDXPArgx0jPfORySA3AsrZhkLykCiXj-2_X2yIXxsXcQ6VV5zKYEfphwg6mBopin_TK3Y4c_2hkyQ_7OFOx0PbBS7Q5XBDAe8MjMzyKs3ATxi2RiCsY2wnYsCEEL3wDriHocAOqR8vfUILl5ajOgT2j3iD4137Uxz46Cq9FtVzoetK4qnq3vUhuhMMMJlGK0AQ5ZauEcPwcEU31BkdfQqjN5Du3mdvTJdv8dN880FIOG27DmpPP6JceKYZOL48oA6xYQnrco1KZV4_U8_imebAOfFDMplAIJ3Gb';
+async function fetchWebApi(endpoint, method, body) {
+  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    method,
+    body:JSON.stringify(body)
+  });
+  return await res.json();
+}
+
+async function getTopTracks(){
+  // Endpoint reference : https://developer.spotify.com/documentation/web-api/reference/get-users-top-artists-and-tracks
+  return (await fetchWebApi(
+    'v1/me/top/tracks?time_range=long_term&limit=5', 'GET'
+  )).items;
+}
+
+const topTracks = await getTopTracks();
+console.log(
+  topTracks?.map(
+    ({name, artists}) =>
+      `${name} by ${artists.map(artist => artist.name).join(', ')}`
+  )
+);
+
+
+// Authorization token that must have been created previously. See : https://developer.spotify.com/documentation/web-api/concepts/authorization
+const token = 'BQDXPArgx0jPfORySA3AsrZhkLykCiXj-2_X2yIXxsXcQ6VV5zKYEfphwg6mBopin_TK3Y4c_2hkyQ_7OFOx0PbBS7Q5XBDAe8MjMzyKs3ATxi2RiCsY2wnYsCEEL3wDriHocAOqR8vfUILl5ajOgT2j3iD4137Uxz46Cq9FtVzoetK4qnq3vUhuhMMMJlGK0AQ5ZauEcPwcEU31BkdfQqjN5Du3mdvTJdv8dN880FIOG27DmpPP6JceKYZOL48oA6xYQnrco1KZV4_U8_imebAOfFDMplAIJ3Gb';
+async function fetchWebApi(endpoint, method, body) {
+  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    method,
+    body:JSON.stringify(body)
+  });
+  return await res.json();
+}
+
+const tracksUri = [
+  'spotify:track:1A3tuE6ti9qoZDwB3LB0t2','spotify:track:0q6LuUqGLUiCPP1cbdwFs3','spotify:track:4wVOKKEHUJxHCFFNUWDn0B','spotify:track:4sebUbjqbcgDSwG6PbSGI0','spotify:track:4osgfFTICMkcGbbigdsa53'
+];
+
+async function createPlaylist(tracksUri){
+  const { id: user_id } = await fetchWebApi('v1/me', 'GET')
+
+  const playlist = await fetchWebApi(
+    `v1/users/${user_id}/playlists`, 'POST', {
+      "name": "My top tracks playlist",
+      "description": "Playlist created by the tutorial on developer.spotify.com",
+      "public": false
+  })
+
+  await fetchWebApi(
+    `v1/playlists/${playlist.id}/tracks?uris=${tracksUri.join(',')}`,
+    'POST'
+  );
+
+  return playlist;
+}
+
+const createdPlaylist = await createPlaylist(tracksUri);
+console.log(createdPlaylist.name, createdPlaylist.id);
+
+
+const playlistId = '4pPiECECUhzyWtfNCJJA9w';
+
+<iframe
+  title="Spotify Embed: Recommendation Playlist "
+  src={`https://open.spotify.com/embed/playlist/4pPiECECUhzyWtfNCJJA9w?utm_source=generator&theme=0`}
+  width="100%"
+  height="100%"
+  style={{ minHeight: '360px' }}
+  frameBorder="0"
+  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+  loading="lazy"
+/>

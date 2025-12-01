@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AsafOS</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" type="image/png" href="./assets/Asaf1.png">
+  <script src="https://kit.fontawesome.com/013fcdd4fe.js" crossorigin="anonymous"></script>
+  <script type="module" src="./javascript/main.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+
+<body class="dark">
+  <header
+    style="margin-top: 5vh; width: 40%; height: 100%; display: flex; flex-direction: row; justify-content: center; align-items: center;">
+    <label class="toggle-switch">
+      <input type="checkbox" id="theme-switch-input" checked>
+      <span class="toggle-switch-inner"></span>
+      <span class="toggle-switch-switch">
+        <span id="toggle-switch-icon"></span>
+      </span>
+    </label>
+  </header>
+
+
+  <main>
+    <div class="grid" id="grid">
+
+
+      <!-- Introduction -->
+      <div class="tile large-tile" id="introduction">
+        <h1>Asaf Axelrod</h1>
+        <p>I am a former tank commander in the Israeli Defense Forces. After completing my service of 2 years and 8
+          months, I turned my focus towards personal development and took on the challenge of learning FullStack web
+          development.
+        </p>
+        <p>
+          I worked at Matrix from May 2023 until July 2025 in the Software Products division.
+        </p>
+        <p>
+          I currently am doing a Bachelors in Computer Science at המכללה למינהל (College of Academic Management) in
+          Rishon LeTzion, Israel.
+        </p>
+      </div>
+
+
+      <!-- Github -->
+      <a target="_blank" href="https://github.com/AxelrodAsaf/" class="tile" id="github-tile">
+        <i class="selection fa-brands fa-github github-logo" id="github-avatar"></i>
+        <div class="github-information">
+          <div class="github-info1">
+            <h2 class="github-username" id="github-username"></h2>
+          </div>
+          <div class="github-info2">
+            <h4 class="github-followers" id="github-followers"></h4>
+            <h4 class="github-following" id="github-following"></h4>
+            <h4 class="github-repos" id="github-repos"></h4>
+          </div>
+        </div>
+      </a>
+
+
+      <!-- Spotify Last Played -->
+      <a target="_blank" href="https://www.spotify.com/" class="spotify-tile tile long-tile" id="spotify-songs-tile">
+        <img id="spotify-album-art" src="./assets/SPOTIFY.png" alt="Album Cover" />
+        <div class="spotify-songs-right">
+          <div class="spotify-songs-right-top">
+            <div class="spotify-lastplayed-container">
+              <div class="spotify-animation" style="display: flex; flex-direction: row; align-items: center;">
+                <div class="spotify-animation-dot" id="spotify1"></div>
+                <div class="spotify-animation-dot" id="spotify2"></div>
+                <div class="spotify-animation-dot" id="spotify3"></div>
+              </div>
+              <h5 class="spotify-lastplayed-text">Last Played</h5>
+            </div>
+            <i class="fa-brands fa-spotify" id="spotify-songs-logo"></i>
+          </div>
+          <div class="spotify-songs-right-bottom">
+            <h4 class="spotify-song-title">Wet Dreamz</h4>
+            <h5 class="spotify-song-artist">J. Cole</h5>
+          </div>
+          <div class="spacing-div-dont-delete"></div>
+        </div>
+      </a>
+
+
+      <!-- News List -->
+      <div id="news-list" class="news-tile tile long-tile">
+        <div class="news-header">
+          <h3 id="news-header-text">Recent News - N12</h3>
+        </div>
+        <div class="news-scroll-container" id="news-scroll-container">
+          <table id="news-table">
+            <tbody id="news-table-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- Picture Carousel -->
+      <div class="tile large-tile">
+        <div class="carousel-container">
+          <div class="carousel">
+            <div class="img-container">
+              <img class="img" src="./assets/Asaf1.png" alt="Picture 1">
+            </div>
+            <div class="img-container">
+              <img class="img" src="./assets/Asaf2.png" alt="Picture 2">
+            </div>
+            <div class="img-container">
+              <img class="img" src="./assets/Asaf3.png" alt="Picture 3">
+            </div>
+            <div class="img-container">
+              <img class="img" src="./assets/Asaf4.png" alt="Picture 4">
+            </div>
+            <div class="img-container">
+              <img class="img" src="./assets/Asaf5.png" alt="Picture 4">
+            </div>
+            <div class="img-container">
+              <img class="img" src="./assets/Asaf6.png" alt="Picture 4">
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Spotify Songs List -->
+      <div id="spotify-songs-list" class="spotify-tile tile large-long-tile">
+        <div class="spotify-songs-header">
+          <h3 id="spotify-songs-header-text">Recently Played Songs</h3>
+          <i class="fa-brands fa-spotify" id="spotify-songs-list-logo"></i>
+        </div>
+        <div class="scroll-container">
+          <table id="spotify-songs-table">
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- Seattle Map -->
+      <div class="tile long-tile" id="map-seattle"></div>
+
+
+      <!-- Herzliya map -->
+      <div class="tile long-tile" id="map-herzliya"></div>
+
+
+      <!-- Spotify Artists -->
+      <div class="spotify-tile tile tall-tile" id="spotify-artists-tile">
+        <div class="spotify-artists-header">
+          <h3 id="spotify-artists-header-text">Top Artists</h3>
+          <i class="fa-brands fa-spotify" id="spotify-artists-logo"></i>
+        </div>
+        <div id="spotify-artists-container" class="scroll-container">
+          <table id="spotify-artists-table">
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+
+      <!-- Instagram -->
+      <a target="_blank" href="https://www.instagram.com/asafaxelrod" class="tile social" id="instagram-tile">
+        <i class="fa-brands fa-instagram" id="instagram-pic"></i>
+        <p style="color: white;">AsafAxelrod</p>
+      </a>
+
+      <!-- Education -->
+      <a target="_blank" href="https://www.cyberpro-israel.co.il/" class="tile" id="education">
+        <h1>FullStack</h1>
+        <img id="cyberpro-img" src="./assets/CYBERPRO.svg" />
+      </a>
+      <a target="_blank" href="https://www.colman.ac.il/" class="tile" id="education">
+        <h1>B.Sc. Comp. Sci.</h1>
+        <img id="colman-img" src="./assets/COLMAN.png" />
+      </a>
+
+
+      <!-- Employment -->
+      <div class="tile" id="employment">
+        <div>
+          <h1>Former</h1>
+          <h1>Employment</h1>
+        </div>
+        <div id="work-pictures">
+          <a target="_blank" href="https://www.matrix-globalservices.com/">
+            <img id="matrix-img" src="./assets/MATRIX.png" alt="Matrix Image" />
+          </a>
+        </div>
+      </div>
+
+
+      <!-- Strava (future) -->
+      <!-- <div id="strava-tile" class="tile large-tile">
+        <div class="container" id="strava-container">
+          <div id="strava-header">Strava - COMING SOON...</div>
+          <div id="strava-content">
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam possimus eius magnam illo maiores. Lorem
+              ipsum dolor sit amet consectetur adipisicing elit.</p>
+          </div>
+        </div>
+      </div> -->
+
+
+      <!-- LinkedIn -->
+      <a target="_blank" href="https://www.linkedin.com/in/asaf-axelrod-9353b1ba" class="tile social"
+        id="linkedin-tile">
+        <i class="fa-brands fa-linkedin-in" id="linkedin-pic"></i>
+      </a>
+
+
+      <!-- Facebook -->
+      <a target="_blank" href="https://www.facebook.com/axelrodasaf" class="tile social" id="facebook-tile">
+        <i class="fa-brands fa-facebook-f" id="facebook-pic"></i>
+      </a>
+
+
+      <!-- Galgalatz -->
+      <div class="tile" id="galgalatz">
+        <h1>גלגל"צ</h1>
+        <i class="fa-solid fa-circle-play glglz-toggle" id="glglz-play-icon"></i>
+        <i class="fa-solid fa-circle-pause glglz-toggle" id="glglz-pause-icon" style="display:none;"></i>
+      </div>
+      <audio id="audio-player"
+        src="https://glzwizzlv.bynetcdn.com/glglz_mp3?awCollectionId=misc&awEpisodeId=glglz"></audio>
+
+
+      <!-- <div id="unused-tile" class="tile ">Tile</div> -->
+      <!-- <div id="unused-tile" class="tile large-long-tile">Very Large Tile</div> -->
+      <!-- <div id="unused-tile" class="tile large-tile">Large</div> -->
+      <!-- <div id="unused-tile" class="tile long-tile">Long</div> -->
+      <!-- <div id="unused-tile" class="tile tall-tile">Tall</div> -->
+      <!-- <div id="unused-tile" class="tile mini-tile">Mini</div> -->
+
+
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const playPauseButton = document.getElementById('galgalatz');
+          const playIcon = document.getElementById('glglz-play-icon');
+          const pauseIcon = document.getElementById('glglz-pause-icon');
+          const audioPlayer = document.getElementById('audio-player');
+
+          const setAudioPlayerState = (isPlaying) => {
+            if (isPlaying) {
+              audioPlayer.volume = 1;
+              audioPlayer.play().catch(error => {
+                console.error('Failed to play audio:', error);
+              });
+              playIcon.style.display = 'none';
+              pauseIcon.style.display = 'block';
+            } else {
+              audioPlayer.pause();
+              playIcon.style.display = 'block';
+              pauseIcon.style.display = 'none';
+            }
+          };
+
+          playPauseButton.addEventListener('click', function () {
+            const isPlaying = audioPlayer.paused ? true : false;
+            setAudioPlayerState(isPlaying);
+          });
+        });
+      </script>
+    </div>
+  </main>
+
+
+  <footer>
+    <div class="footer" id="footer">
+      <h5>Asaf <a style="text-decoration: none; cursor: default;" href="./adminPanel.html">A</a>xelrod 2023-25</h5>
+    </div>
+  </footer>
+</body>
+
+</html>
