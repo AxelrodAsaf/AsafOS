@@ -1,5 +1,10 @@
 const themeStorageKey = "asafos-theme";
-const backendBaseUrl = "https://asafos-backend.onrender.com";
+const backendBaseUrl =
+  window.ASAFOS_BACKEND_URL ??
+  (window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : "https://asafos-backend.onrender.com");
 
 const fetchJson = async (url) => {
   const response = await fetch(url);
@@ -15,8 +20,21 @@ const fetchWithFallback = async (primaryUrl, fallbackUrl) => {
   try {
     return await fetchJson(primaryUrl);
   } catch (error) {
+    if (!fallbackUrl) {
+      throw error;
+    }
+
     console.warn(`Falling back to ${fallbackUrl} after ${primaryUrl} failed.`, error);
     return fetchJson(fallbackUrl);
+  }
+};
+
+const loadConfig = async () => {
+  try {
+    return await fetchJson(`${backendBaseUrl}/api/config`);
+  } catch (error) {
+    console.warn("Falling back to local defaults after config request failed.", error);
+    return null;
   }
 };
 
@@ -297,7 +315,7 @@ const initializeAudioPlayer = () => {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const [config, songs, artists, articles] = await Promise.all([
-      fetchWithFallback(`${backendBaseUrl}/api/config`, null).catch(() => null),
+      loadConfig(),
       fetchWithFallback(
         `${backendBaseUrl}/api/spotify/recent-songs`,
         "./recentSongs.json"
