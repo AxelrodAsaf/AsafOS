@@ -1,10 +1,7 @@
 const themeStorageKey = "asafos-theme";
 const backendBaseUrl =
   window.ASAFOS_BACKEND_URL ??
-  (window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? "http://localhost:3000"
-    : "https://asafos-backend.onrender.com");
+  "https://asafos-backend.onrender.com";
 
 const fetchJson = async (url) => {
   const response = await fetch(url);
