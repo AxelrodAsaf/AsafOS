@@ -1,13 +1,23 @@
 const themeStorageKey = "asafos-theme";
+const backendBaseUrl = "https://asafos-backend.onrender.com";
 
-const fetchJson = async (path) => {
-  const response = await fetch(path);
+const fetchJson = async (url) => {
+  const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`Failed to load ${path}: ${response.status}`);
+    throw new Error(`Failed to load ${url}: ${response.status}`);
   }
 
   return response.json();
+};
+
+const fetchWithFallback = async (primaryUrl, fallbackUrl) => {
+  try {
+    return await fetchJson(primaryUrl);
+  } catch (error) {
+    console.warn(`Falling back to ${fallbackUrl} after ${primaryUrl} failed.`, error);
+    return fetchJson(fallbackUrl);
+  }
 };
 
 const updateGitHubCard = async () => {
@@ -41,6 +51,35 @@ const updateSpotifyHero = (song) => {
   const image = tile.querySelector("#spotify-album-art");
   image.src = song.albumImage;
   image.alt = `${song.artistName} - ${song.trackName}`;
+};
+
+const updateResumeTile = (resumePdfUrl) => {
+  if (!resumePdfUrl) {
+    return;
+  }
+
+  const grid = document.getElementById("grid");
+  const existingTile = document.getElementById("resume-tile");
+
+  if (existingTile) {
+    existingTile.href = resumePdfUrl;
+    return;
+  }
+
+  const resumeTile = document.createElement("a");
+  resumeTile.id = "resume-tile";
+  resumeTile.className = "tile";
+  resumeTile.href = resumePdfUrl;
+  resumeTile.target = "_blank";
+  resumeTile.rel = "noreferrer";
+  resumeTile.innerHTML = `
+    <div class="resume-tile-content">
+      <h1>Resume</h1>
+      <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+    </div>
+  `;
+
+  grid.appendChild(resumeTile);
 };
 
 const updateSpotifySongsList = (songs) => {
@@ -111,7 +150,39 @@ const updateNews = (articles) => {
   });
 };
 
-const buildMap = (containerId, coordinates, zoom) => {
+const createTileLayer = (mapConfig, isDarkMode) => {
+  const defaultConfig = {
+    tileUrlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  };
+
+  if (!window.L) {
+    return null;
+  }
+
+  const config = mapConfig ?? defaultConfig;
+  let tileUrlTemplate = config.tileUrlTemplate ?? defaultConfig.tileUrlTemplate;
+
+  if (config.provider === "stadia") {
+    const currentStyle = config.style ?? "alidade_smooth";
+    const nextStyle = isDarkMode
+      ? currentStyle.replace("_dark", "") + "_dark"
+      : currentStyle.replace("_dark", "");
+
+    tileUrlTemplate = tileUrlTemplate.replace(
+      `/tiles/${currentStyle}/`,
+      `/tiles/${nextStyle}/`
+    );
+  }
+
+  return window.L.tileLayer(tileUrlTemplate, {
+    attribution: config.attribution ?? defaultConfig.attribution,
+    maxZoom: 20
+  });
+};
+
+const buildMap = (containerId, coordinates, zoom, mapConfig, isDarkMode) => {
   const container = document.getElementById(containerId);
 
   if (!container || !window.L) {
@@ -123,15 +194,43 @@ const buildMap = (containerId, coordinates, zoom) => {
     zoomControl: false
   }).setView(coordinates, zoom);
 
-  window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+  const layer = createTileLayer(mapConfig, isDarkMode);
+
+  if (layer) {
+    layer.addTo(map);
+    container._leafletTileLayer = layer;
+  }
+
   window.L.marker(coordinates).addTo(map);
 
   return map;
 };
 
-const applyTheme = (isDarkMode, maps) => {
+const updateMapThemes = (maps, mapConfig, isDarkMode) => {
+  maps.forEach((map) => {
+    if (!map) {
+      return;
+    }
+
+    const container = map.getContainer();
+    const previousLayer = container._leafletTileLayer;
+    const nextLayer = createTileLayer(mapConfig, isDarkMode);
+
+    if (previousLayer) {
+      map.removeLayer(previousLayer);
+    }
+
+    if (nextLayer) {
+      nextLayer.addTo(map);
+      container._leafletTileLayer = nextLayer;
+    }
+  });
+};
+
+const applyTheme = (isDarkMode, maps, mapConfig) => {
   document.body.classList.toggle("dark", isDarkMode);
   localStorage.setItem(themeStorageKey, isDarkMode ? "dark" : "light");
+  updateMapThemes(maps, mapConfig, isDarkMode);
 
   maps.forEach((map) => {
     if (map) {
@@ -140,15 +239,15 @@ const applyTheme = (isDarkMode, maps) => {
   });
 };
 
-const initializeTheme = (maps) => {
+const initializeTheme = (maps, mapConfig) => {
   const toggle = document.getElementById("theme-switch-input");
   const isDarkMode = (localStorage.getItem(themeStorageKey) ?? "light") === "dark";
 
   toggle.checked = isDarkMode;
-  applyTheme(isDarkMode, maps);
+  applyTheme(isDarkMode, maps, mapConfig);
 
   toggle.addEventListener("change", () => {
-    applyTheme(toggle.checked, maps);
+    applyTheme(toggle.checked, maps, mapConfig);
   });
 };
 
@@ -196,21 +295,33 @@ const initializeAudioPlayer = () => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const maps = [
-    buildMap("map-seattle", [47.6252, -122.2021], 9.5),
-    buildMap("map-herzliya", [32.1663, 34.8436], 11.5)
-  ];
-
-  initializeTheme(maps);
-  initializeCarousel();
-  initializeAudioPlayer();
-
   try {
-    const [songs, artists, articles] = await Promise.all([
-      fetchJson("./recentSongs.json"),
-      fetchJson("./topArtists.json"),
-      fetchJson("./newsArticles.json")
+    const [config, songs, artists, articles] = await Promise.all([
+      fetchWithFallback(`${backendBaseUrl}/api/config`, null).catch(() => null),
+      fetchWithFallback(
+        `${backendBaseUrl}/api/spotify/recent-songs`,
+        "./recentSongs.json"
+      ),
+      fetchWithFallback(
+        `${backendBaseUrl}/api/spotify/top-artists`,
+        "./topArtists.json"
+      ),
+      fetchWithFallback(
+        `${backendBaseUrl}/api/news/n12`,
+        "./newsArticles.json"
+      )
     ]);
+
+    const isDarkMode = (localStorage.getItem(themeStorageKey) ?? "light") === "dark";
+    const mapConfig = config?.map ?? null;
+    const maps = [
+      buildMap("map-seattle", [47.6252, -122.2021], 9.5, mapConfig, isDarkMode),
+      buildMap("map-herzliya", [32.1663, 34.8436], 11.5, mapConfig, isDarkMode)
+    ];
+
+    initializeTheme(maps, mapConfig);
+    initializeCarousel();
+    initializeAudioPlayer();
 
     if (songs.length > 0) {
       updateSpotifyHero(songs[0]);
@@ -219,6 +330,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     updateSpotifyArtists(artists);
     updateNews(articles);
+    updateResumeTile(config?.resumePdfUrl ?? null);
     await updateGitHubCard();
   } catch (error) {
     console.error("Failed to initialize old-style UI:", error);

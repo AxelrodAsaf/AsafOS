@@ -400,6 +400,27 @@ a {
   align-items: center;
 }
 
+#resume-tile {
+  background: linear-gradient(145deg, #5e7df4, #8a43d0);
+  color: white;
+}
+
+.resume-tile-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.resume-tile-content h1 {
+  margin: 0;
+  font-size: 1.6rem;
+}
+
+.resume-tile-content i {
+  font-size: 2rem;
+}
+
 #spotify-artists-tile,
 #spotify-songs-list,
 #spotify-songs-tile {

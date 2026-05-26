@@ -25,4 +25,5 @@ Then open `http://localhost:8080`.
 ## Notes
 
 - The UI is intentionally close to the original AsafOS design.
-- Spotify, N12 RSS, map config, and the future resume PDF tile are intended to be served by the separate backend repo.
+- In production, the frontend fetches Spotify, N12 RSS, map config, and the optional resume PDF tile from `https://asafos-backend.onrender.com`.
+- If the backend is unavailable, the frontend falls back to the local JSON files for Spotify and news content.
