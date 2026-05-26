@@ -1,0 +1,26 @@
+[
+  {
+    "title": "בדרך ללאומית: ריינה וק\"ש נפרדו ב-1:1",
+    "description": "",
+    "link": "https://example.com/article1",
+    "pubDate": "N12",
+    "shortDescription": "",
+    "image": "./assets/MATRIX.png"
+  },
+  {
+    "title": "BCL-חזרה מ-20 הפרש: ריטאס וילנה זכתה ב",
+    "description": "",
+    "link": "https://example.com/article2",
+    "pubDate": "N12",
+    "shortDescription": "",
+    "image": "./assets/COLMAN.png"
+  },
+  {
+    "title": "כותרת לדוגמה נוספת לעיצוב הישן",
+    "description": "",
+    "link": "https://example.com/article3",
+    "pubDate": "N12",
+    "shortDescription": "",
+    "image": "./assets/CYBERPRO.svg"
+  }
+]
