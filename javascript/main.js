@@ -3,6 +3,14 @@ const backendBaseUrl =
   window.ASAFOS_BACKEND_URL ??
   "https://asafos-backend.onrender.com";
 const defaultResumePdfUrl = "./assets/Asaf-Axelrod-Resume.pdf";
+const defaultNewsImageFallback =
+  "data:image/svg+xml;utf8," +
+  encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="160" height="110" viewBox="0 0 160 110">
+      <rect width="160" height="110" rx="12" fill="#ececec"/>
+      <text x="80" y="66" text-anchor="middle" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#d40000">N12</text>
+    </svg>
+  `);
 
 const fetchJson = async (url) => {
   const response = await fetch(url);
@@ -84,14 +92,24 @@ const updateResumeTile = (resumePdfUrl) => {
 
   const resumeTile = document.createElement("a");
   resumeTile.id = "resume-tile";
-  resumeTile.className = "tile";
+  resumeTile.className = "tile long-tile";
   resumeTile.href = resumePdfUrl;
   resumeTile.target = "_blank";
   resumeTile.rel = "noreferrer";
   resumeTile.innerHTML = `
-    <div class="resume-tile-content">
-      <h1>Resume</h1>
-      <i class="fa-solid fa-file-arrow-down" aria-hidden="true"></i>
+    <div class="resume-header">
+      <h3 class="resume-header-text">Resume</h3>
+    </div>
+    <div class="resume-preview-shell">
+      <iframe
+        class="resume-preview-frame"
+        src="${resumePdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH"
+        title="Resume preview"
+        loading="lazy"
+      ></iframe>
+      <div class="resume-download-overlay" aria-hidden="true">
+        <i class="fa-solid fa-file-arrow-down"></i>
+      </div>
     </div>
   `;
 
@@ -150,6 +168,7 @@ const updateNews = (articles) => {
   tableBody.innerHTML = "";
 
   articles.forEach((article) => {
+    const imageUrl = article.image || defaultNewsImageFallback;
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>
@@ -158,12 +177,72 @@ const updateNews = (articles) => {
       </td>
       <td>
         <a href="${article.link}" target="_blank" rel="noreferrer">
-          <img src="${article.image}" alt="${article.title}">
+          <img src="${imageUrl}" alt="${article.title}">
         </a>
       </td>
     `;
+
+    const image = row.querySelector("img");
+    image.addEventListener("error", () => {
+      image.src = defaultNewsImageFallback;
+    }, { once: true });
+
     tableBody.appendChild(row);
   });
+};
+
+const initializeAutoScroll = (containerId, speed = 0.35, resetDelayMs = 1200) => {
+  const container = document.getElementById(containerId);
+
+  if (!container) {
+    return;
+  }
+
+  let paused = false;
+  let resetTimeoutId = null;
+
+  const clearResetTimeout = () => {
+    if (resetTimeoutId) {
+      window.clearTimeout(resetTimeoutId);
+      resetTimeoutId = null;
+    }
+  };
+
+  const scheduleReset = () => {
+    if (resetTimeoutId) {
+      return;
+    }
+
+    resetTimeoutId = window.setTimeout(() => {
+      container.scrollTop = 0;
+      resetTimeoutId = null;
+    }, resetDelayMs);
+  };
+
+  container.addEventListener("mouseenter", () => {
+    paused = true;
+  });
+
+  container.addEventListener("mouseleave", () => {
+    paused = false;
+  });
+
+  const step = () => {
+    const maxScrollTop = container.scrollHeight - container.clientHeight;
+
+    if (!paused && maxScrollTop > 0) {
+      if (container.scrollTop >= maxScrollTop - 1) {
+        scheduleReset();
+      } else {
+        clearResetTimeout();
+        container.scrollTop = Math.min(container.scrollTop + speed, maxScrollTop);
+      }
+    }
+
+    window.requestAnimationFrame(step);
+  };
+
+  window.requestAnimationFrame(step);
 };
 
 const createTileLayer = (mapConfig, isDarkMode) => {
@@ -315,7 +394,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const [config, songs, artists, articles] = await Promise.all([
       loadConfig(),
       fetchWithFallback(
-        `${backendBaseUrl}/api/spotify/recent-songs`,
+        `${backendBaseUrl}/api/spotify/recent-songs?limit=50`,
         "./recentSongs.json"
       ),
       fetchWithFallback(
@@ -347,6 +426,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateSpotifyArtists(artists);
     updateNews(articles);
     updateResumeTile(config?.resumePdfUrl ?? defaultResumePdfUrl);
+    initializeAutoScroll("spotify-songs-scroll-container", 0.3, 1400);
+    initializeAutoScroll("news-scroll-container", 0.25, 1600);
     await updateGitHubCard();
   } catch (error) {
     console.error("Failed to initialize old-style UI:", error);
