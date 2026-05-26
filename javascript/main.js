@@ -83,10 +83,17 @@ const updateResumeTile = (resumePdfUrl) => {
   }
 
   const grid = document.getElementById("grid");
+  const newsTile = document.getElementById("news-list");
   const existingTile = document.getElementById("resume-tile");
 
   if (existingTile) {
     existingTile.href = resumePdfUrl;
+    const frame = existingTile.querySelector(".resume-preview-frame");
+
+    if (frame) {
+      frame.src = `${resumePdfUrl}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
+    }
+
     return;
   }
 
@@ -112,6 +119,11 @@ const updateResumeTile = (resumePdfUrl) => {
       </div>
     </div>
   `;
+
+  if (newsTile) {
+    newsTile.insertAdjacentElement("afterend", resumeTile);
+    return;
+  }
 
   grid.appendChild(resumeTile);
 };
@@ -199,25 +211,7 @@ const initializeAutoScroll = (containerId, speed = 0.35, resetDelayMs = 1200) =>
   }
 
   let paused = false;
-  let resetTimeoutId = null;
-
-  const clearResetTimeout = () => {
-    if (resetTimeoutId) {
-      window.clearTimeout(resetTimeoutId);
-      resetTimeoutId = null;
-    }
-  };
-
-  const scheduleReset = () => {
-    if (resetTimeoutId) {
-      return;
-    }
-
-    resetTimeoutId = window.setTimeout(() => {
-      container.scrollTop = 0;
-      resetTimeoutId = null;
-    }, resetDelayMs);
-  };
+  let resetAt = null;
 
   container.addEventListener("mouseenter", () => {
     paused = true;
@@ -227,14 +221,19 @@ const initializeAutoScroll = (containerId, speed = 0.35, resetDelayMs = 1200) =>
     paused = false;
   });
 
-  const step = () => {
+  const step = (timestamp) => {
     const maxScrollTop = container.scrollHeight - container.clientHeight;
 
     if (!paused && maxScrollTop > 0) {
-      if (container.scrollTop >= maxScrollTop - 1) {
-        scheduleReset();
+      if (resetAt && timestamp >= resetAt) {
+        container.scrollTop = 0;
+        resetAt = null;
+      } else if (container.scrollTop >= maxScrollTop - 1) {
+        if (!resetAt) {
+          resetAt = timestamp + resetDelayMs;
+        }
       } else {
-        clearResetTimeout();
+        resetAt = null;
         container.scrollTop = Math.min(container.scrollTop + speed, maxScrollTop);
       }
     }
@@ -398,7 +397,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         "./recentSongs.json"
       ),
       fetchWithFallback(
-        `${backendBaseUrl}/api/spotify/top-artists`,
+        `${backendBaseUrl}/api/spotify/top-artists?limit=20`,
         "./topArtists.json"
       ),
       fetchWithFallback(
