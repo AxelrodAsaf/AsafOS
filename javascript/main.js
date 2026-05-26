@@ -2,6 +2,7 @@ const themeStorageKey = "asafos-theme";
 const backendBaseUrl =
   window.ASAFOS_BACKEND_URL ??
   "https://asafos-backend.onrender.com";
+const defaultResumePdfUrl = "./assets/Asaf-Axelrod-Resume.pdf";
 
 const fetchJson = async (url) => {
   const response = await fetch(url);
@@ -345,7 +346,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     updateSpotifyArtists(artists);
     updateNews(articles);
-    updateResumeTile(config?.resumePdfUrl ?? null);
+    updateResumeTile(config?.resumePdfUrl ?? defaultResumePdfUrl);
     await updateGitHubCard();
   } catch (error) {
     console.error("Failed to initialize old-style UI:", error);
