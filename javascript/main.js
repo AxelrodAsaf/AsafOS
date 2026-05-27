@@ -44,6 +44,25 @@ const loadConfig = async () => {
   }
 };
 
+const formatArticleTime = (value) => {
+  if (!value) {
+    return "";
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    const match = value.match(/(\d{2}):(\d{2})/);
+    return match ? `${match[1]}:${match[2]}` : "";
+  }
+
+  return parsed.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  });
+};
+
 const updateGitHubCard = async () => {
   const response = await fetch("https://api.github.com/users/AxelrodAsaf");
 
@@ -68,6 +87,7 @@ const updateGitHubCard = async () => {
 
 const updateSpotifyHero = (song) => {
   const tile = document.getElementById("spotify-songs-tile");
+  tile.hidden = false;
   tile.href = song.spotifyUrl;
   tile.querySelector(".spotify-song-title").textContent = song.trackName;
   tile.querySelector(".spotify-song-artist").textContent = song.artistName;
@@ -129,7 +149,9 @@ const updateResumeTile = (resumePdfUrl) => {
 };
 
 const updateSpotifySongsList = (songs) => {
+  const tile = document.getElementById("spotify-songs-list");
   const tableBody = document.querySelector("#spotify-songs-table tbody");
+  tile.hidden = false;
   tableBody.innerHTML = "";
 
   songs.forEach((song) => {
@@ -150,7 +172,9 @@ const updateSpotifySongsList = (songs) => {
 };
 
 const updateSpotifyArtists = (artists) => {
+  const tile = document.getElementById("spotify-artists-tile");
   const tableBody = document.querySelector("#spotify-artists-table tbody");
+  tile.hidden = false;
   tableBody.innerHTML = "";
 
   artists.forEach((artist, index) => {
@@ -175,17 +199,69 @@ const updateSpotifyArtists = (artists) => {
   });
 };
 
+const updateGoodreadsCurrentBook = (book) => {
+  const tile = document.getElementById("goodreads-current-tile");
+
+  if (!tile || !book) {
+    return;
+  }
+
+  tile.hidden = false;
+  tile.href = book.link || tile.href;
+  document.getElementById("goodreads-current-cover").src = book.imageUrl;
+  document.getElementById("goodreads-current-title").textContent = book.title;
+  document.getElementById("goodreads-current-author").textContent = book.author;
+};
+
+const renderRatingStars = (rating) => {
+  const fullStars = "★".repeat(Math.max(0, Math.min(5, rating)));
+  const emptyStars = "☆".repeat(Math.max(0, 5 - rating));
+  return `${fullStars}${emptyStars}`;
+};
+
+const updateGoodreadsRatedBooks = (books) => {
+  const tile = document.getElementById("goodreads-ratings-tile");
+  const tableBody = document.querySelector("#goodreads-ratings-table tbody");
+
+  if (!tile || !tableBody || !books?.length) {
+    return;
+  }
+
+  tile.hidden = false;
+  tableBody.innerHTML = "";
+
+  books.forEach((book) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>
+        <a href="${book.link}" target="_blank" rel="noreferrer">
+          <img src="${book.imageUrl}" alt="${book.title}">
+        </a>
+      </td>
+      <td>
+        <a href="${book.link}" target="_blank" rel="noreferrer" class="goodreads-book-title">${book.title}</a>
+        <div class="goodreads-book-author">${book.author}</div>
+        <div class="goodreads-book-rating">${renderRatingStars(book.rating)}</div>
+      </td>
+    `;
+    tableBody.appendChild(row);
+  });
+};
+
 const updateNews = (articles) => {
+  const tile = document.getElementById("news-list");
   const tableBody = document.getElementById("news-table-body");
+  tile.hidden = false;
   tableBody.innerHTML = "";
 
   articles.forEach((article) => {
     const imageUrl = article.image || defaultNewsImageFallback;
+    const articleTime = formatArticleTime(article.pubDate);
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>
         <a href="${article.link}" target="_blank" rel="noreferrer">${article.title}</a>
-        <div class="news-meta">${article.pubDate}</div>
+        <div class="news-meta">${articleTime}</div>
       </td>
       <td>
         <a href="${article.link}" target="_blank" rel="noreferrer">
@@ -376,6 +452,8 @@ const buildMap = (containerId, coordinates, zoom, mapConfig, isDarkMode) => {
     return null;
   }
 
+  container.hidden = false;
+
   const map = window.L.map(containerId, {
     attributionControl: false,
     zoomControl: false
@@ -483,7 +561,7 @@ const initializeAudioPlayer = () => {
 
 document.addEventListener("DOMContentLoaded", async () => {
   try {
-    const [config, songs, artists, articles, latestRun] = await Promise.all([
+    const [config, songs, artists, articles, latestRun, goodreads] = await Promise.all([
       loadConfig(),
       fetchWithFallback(
         `${backendBaseUrl}/api/spotify/recent-songs?limit=50`,
@@ -497,7 +575,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         `${backendBaseUrl}/api/news/n12`,
         "./newsArticles.json"
       ),
-      fetchJson(`${backendBaseUrl}/api/strava/latest-run`).catch(() => null)
+      fetchJson(`${backendBaseUrl}/api/strava/latest-run`).catch(() => null),
+      fetchJson(`${backendBaseUrl}/api/goodreads?limit=25`).catch(() => null)
     ]);
 
     const isDarkMode = (localStorage.getItem(themeStorageKey) ?? "light") === "dark";
@@ -519,10 +598,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     updateSpotifyArtists(artists);
+    updateGoodreadsCurrentBook(goodreads?.currentBook ?? null);
+    updateGoodreadsRatedBooks(goodreads?.ratedBooks ?? []);
     updateNews(articles);
     updateResumeTile(config?.resumePdfUrl ?? defaultResumePdfUrl);
     initializeAutoScroll("spotify-songs-scroll-container", 0.3, 1400);
     initializeAutoScroll("news-scroll-container", 0.25, 1600);
+    initializeAutoScroll("spotify-artists-container", 0.18, 1400);
+    initializeAutoScroll("goodreads-ratings-scroll-container", 0.22, 1500);
     await updateGitHubCard();
   } catch (error) {
     console.error("Failed to initialize old-style UI:", error);

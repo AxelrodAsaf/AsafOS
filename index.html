@@ -78,7 +78,7 @@
           </div>
         </a>
 
-        <a target="_blank" href="https://www.spotify.com/" class="spotify-tile tile long-tile" id="spotify-songs-tile">
+        <a target="_blank" href="https://www.spotify.com/" class="spotify-tile tile long-tile" id="spotify-songs-tile" hidden>
           <img id="spotify-album-art" src="./assets/SPOTIFY.png" alt="Album Cover" />
           <div class="spotify-songs-right">
             <div class="spotify-songs-right-top">
@@ -100,7 +100,7 @@
           </div>
         </a>
 
-        <div id="news-list" class="news-tile tile long-tile">
+        <div id="news-list" class="news-tile tile long-tile" hidden>
           <div class="news-header">
             <h3 id="news-header-text">Recent News - N12</h3>
           </div>
@@ -110,6 +110,22 @@
             </table>
           </div>
         </div>
+
+        <a
+          target="_blank"
+          rel="noreferrer"
+          href="https://www.goodreads.com/user/show/200705407-asaf-axelrod"
+          class="tile"
+          id="goodreads-current-tile"
+          hidden
+        >
+          <div class="goodreads-current-header">Currently Reading</div>
+          <img id="goodreads-current-cover" alt="Current Goodreads book cover" />
+          <div class="goodreads-current-content">
+            <h4 id="goodreads-current-title"></h4>
+            <p id="goodreads-current-author"></p>
+          </div>
+        </a>
 
         <a
           target="_blank"
@@ -165,7 +181,7 @@
           </div>
         </div>
 
-        <div id="spotify-songs-list" class="spotify-tile tile large-tile">
+        <div id="spotify-songs-list" class="spotify-tile tile large-tile" hidden>
           <div class="spotify-songs-header">
             <h3 id="spotify-songs-header-text">Recently Played Songs</h3>
             <i class="fa-brands fa-spotify" id="spotify-songs-list-logo"></i>
@@ -177,10 +193,21 @@
           </div>
         </div>
 
-        <div class="tile long-tile" id="map-seattle"></div>
-        <div class="tile long-tile" id="map-herzliya"></div>
+        <div class="tile large-tile" id="goodreads-ratings-tile" hidden>
+          <div class="goodreads-ratings-header">
+            <h3>Recent Goodreads Ratings</h3>
+          </div>
+          <div class="goodreads-ratings-scroll" id="goodreads-ratings-scroll-container">
+            <table id="goodreads-ratings-table">
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
 
-        <div class="spotify-tile tile tall-tile" id="spotify-artists-tile">
+        <div class="tile long-tile" id="map-seattle" hidden></div>
+        <div class="tile long-tile" id="map-herzliya" hidden></div>
+
+        <div class="spotify-tile tile tall-tile" id="spotify-artists-tile" hidden>
           <div class="spotify-artists-header">
             <h3 id="spotify-artists-header-text">Top Artists</h3>
             <i class="fa-brands fa-spotify" id="spotify-artists-logo"></i>
