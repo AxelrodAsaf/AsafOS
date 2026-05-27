@@ -54,6 +54,10 @@ body {
   width: 100%;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 header {
   height: 0;
   top: 0;

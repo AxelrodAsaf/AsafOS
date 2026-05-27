@@ -202,7 +202,12 @@ const updateSpotifyArtists = (artists) => {
 const updateGoodreadsCurrentBook = (book) => {
   const tile = document.getElementById("goodreads-current-tile");
 
-  if (!tile || !book) {
+  if (!tile) {
+    return;
+  }
+
+  if (!book || !book.title || !book.imageUrl) {
+    tile.hidden = true;
     return;
   }
 
@@ -223,14 +228,24 @@ const updateGoodreadsRatedBooks = (books) => {
   const tile = document.getElementById("goodreads-ratings-tile");
   const tableBody = document.querySelector("#goodreads-ratings-table tbody");
 
-  if (!tile || !tableBody || !books?.length) {
+  if (!tile || !tableBody) {
+    return;
+  }
+
+  const validBooks = (books ?? []).filter(
+    (book) => book?.title && book?.imageUrl && book?.author
+  );
+
+  if (validBooks.length === 0) {
+    tile.hidden = true;
+    tableBody.innerHTML = "";
     return;
   }
 
   tile.hidden = false;
   tableBody.innerHTML = "";
 
-  books.forEach((book) => {
+  validBooks.forEach((book) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>
