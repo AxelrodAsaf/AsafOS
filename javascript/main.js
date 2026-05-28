@@ -103,7 +103,7 @@ const updateResumeTile = (resumePdfUrl) => {
   }
 
   const grid = document.getElementById("grid");
-  const newsTile = document.getElementById("news-list");
+  const insertionAnchor = document.getElementById("spotify-songs-tile");
   const existingTile = document.getElementById("resume-tile");
 
   if (existingTile) {
@@ -140,8 +140,8 @@ const updateResumeTile = (resumePdfUrl) => {
     </div>
   `;
 
-  if (newsTile) {
-    newsTile.insertAdjacentElement("afterend", resumeTile);
+  if (insertionAnchor) {
+    insertionAnchor.insertAdjacentElement("afterend", resumeTile);
     return;
   }
 
@@ -387,39 +387,60 @@ const updateStravaTile = (activity, mapConfig, isDarkMode) => {
   return map;
 };
 
-const initializeAutoScroll = (containerId, speed = 0.35, resetDelayMs = 1200) => {
+const initializeAutoScroll = (containerId, speed = 0.35) => {
   const container = document.getElementById(containerId);
 
   if (!container) {
     return;
   }
 
-  let paused = false;
-  let resetAt = null;
+  if (container.dataset.autoscrollInitialized === "true") {
+    return;
+  }
 
-  container.addEventListener("mouseenter", () => {
+  container.dataset.autoscrollInitialized = "true";
+
+  const hoverTarget = container.closest(".tile") ?? container;
+  let paused = false;
+  let currentPosition = 0;
+  let lastTimestamp = null;
+
+  hoverTarget.addEventListener("mouseenter", () => {
     paused = true;
   });
 
-  container.addEventListener("mouseleave", () => {
+  hoverTarget.addEventListener("mouseleave", () => {
     paused = false;
   });
 
   const step = (timestamp) => {
     const maxScrollTop = container.scrollHeight - container.clientHeight;
 
-    if (!paused && maxScrollTop > 0) {
-      if (resetAt && timestamp >= resetAt) {
+    if (lastTimestamp === null) {
+      lastTimestamp = timestamp;
+    }
+
+    const deltaMs = timestamp - lastTimestamp;
+    lastTimestamp = timestamp;
+
+    if (maxScrollTop <= 0) {
+      currentPosition = 0;
+      container.scrollTop = 0;
+      window.requestAnimationFrame(step);
+      return;
+    }
+
+    if (!paused) {
+      currentPosition += (deltaMs / 16.6667) * speed;
+
+      if (currentPosition >= maxScrollTop) {
+        currentPosition = 0;
         container.scrollTop = 0;
-        resetAt = null;
-      } else if (container.scrollTop >= maxScrollTop - 1) {
-        if (!resetAt) {
-          resetAt = timestamp + resetDelayMs;
-        }
       } else {
-        resetAt = null;
-        container.scrollTop = Math.min(container.scrollTop + speed, maxScrollTop);
+        container.scrollTop = currentPosition;
       }
+    } else {
+      currentPosition = container.scrollTop;
     }
 
     window.requestAnimationFrame(step);
@@ -617,10 +638,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     updateGoodreadsRatedBooks(goodreads?.ratedBooks ?? []);
     updateNews(articles);
     updateResumeTile(config?.resumePdfUrl ?? defaultResumePdfUrl);
-    initializeAutoScroll("spotify-songs-scroll-container", 0.3, 1400);
-    initializeAutoScroll("news-scroll-container", 0.25, 1600);
-    initializeAutoScroll("spotify-artists-container", 0.18, 1400);
-    initializeAutoScroll("goodreads-ratings-scroll-container", 0.22, 1500);
+    initializeAutoScroll("spotify-songs-scroll-container", 0.3);
+    initializeAutoScroll("news-scroll-container", 0.25);
+    initializeAutoScroll("spotify-artists-container", 0.22);
+    initializeAutoScroll("goodreads-ratings-scroll-container", 0.24);
     await updateGitHubCard();
   } catch (error) {
     console.error("Failed to initialize old-style UI:", error);
