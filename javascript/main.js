@@ -46,6 +46,15 @@ const captureTilePositions = () => {
   );
 };
 
+const isRectInViewport = (rect) => {
+  return (
+    rect.bottom > 0 &&
+    rect.right > 0 &&
+    rect.top < window.innerHeight &&
+    rect.left < window.innerWidth
+  );
+};
+
 const getResponsiveGridColumns = (viewportWidth = window.innerWidth) => {
   if (viewportWidth <= 670) {
     return 2;
@@ -118,6 +127,10 @@ const animateTileReflow = () => {
     const previousRect = lastTilePositions.get(tile);
 
     if (!previousRect) {
+      return;
+    }
+
+    if (!isRectInViewport(previousRect) && !isRectInViewport(nextRect)) {
       return;
     }
 
