@@ -12,6 +12,101 @@ const defaultNewsImageFallback =
     </svg>
   `);
 
+let lastTilePositions = new Map();
+let tileReflowFrame = null;
+
+const getVisibleGridTiles = () => {
+  const grid = document.getElementById("grid");
+
+  if (!grid) {
+    return [];
+  }
+
+  return Array.from(grid.children).filter((tile) => {
+    if (!(tile instanceof HTMLElement)) {
+      return false;
+    }
+
+    if (tile.hidden) {
+      return false;
+    }
+
+    return window.getComputedStyle(tile).display !== "none";
+  });
+};
+
+const captureTilePositions = () => {
+  return new Map(
+    getVisibleGridTiles().map((tile) => [tile, tile.getBoundingClientRect()])
+  );
+};
+
+const animateTileReflow = () => {
+  const nextPositions = captureTilePositions();
+
+  nextPositions.forEach((nextRect, tile) => {
+    const previousRect = lastTilePositions.get(tile);
+
+    if (!previousRect) {
+      return;
+    }
+
+    const deltaX = previousRect.left - nextRect.left;
+    const deltaY = previousRect.top - nextRect.top;
+
+    if (Math.abs(deltaX) < 0.5 && Math.abs(deltaY) < 0.5) {
+      return;
+    }
+
+    tile.style.transition = "none";
+    tile.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+    tile.getBoundingClientRect();
+
+    window.requestAnimationFrame(() => {
+      tile.style.transition = "transform 360ms cubic-bezier(0.22, 1, 0.36, 1)";
+      tile.style.transform = "";
+
+      const clearTransition = () => {
+        tile.style.transition = "";
+        tile.removeEventListener("transitionend", clearTransition);
+      };
+
+      tile.addEventListener("transitionend", clearTransition);
+    });
+  });
+
+  lastTilePositions = nextPositions;
+};
+
+const queueTileReflow = () => {
+  if (tileReflowFrame !== null) {
+    return;
+  }
+
+  tileReflowFrame = window.requestAnimationFrame(() => {
+    tileReflowFrame = null;
+    animateTileReflow();
+  });
+};
+
+const initializeTileReflow = () => {
+  lastTilePositions = captureTilePositions();
+  window.addEventListener("resize", queueTileReflow);
+};
+
+const hideLoadingOverlay = () => {
+  const overlay = document.getElementById("page-loading-overlay");
+
+  if (!overlay) {
+    return;
+  }
+
+  window.setTimeout(() => {
+    overlay.classList.add("is-hidden");
+  }, 200);
+};
+
 const fetchJson = async (url) => {
   const response = await fetch(url);
 
@@ -596,6 +691,8 @@ const initializeAudioPlayer = () => {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
+  initializeTileReflow();
+
   try {
     const [config, songs, artists, articles, latestRun, goodreads] = await Promise.all([
       loadConfig(),
@@ -643,7 +740,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeAutoScroll("spotify-artists-container", 0.22);
     initializeAutoScroll("goodreads-ratings-scroll-container", 0.24);
     await updateGitHubCard();
+    queueTileReflow();
   } catch (error) {
     console.error("Failed to initialize old-style UI:", error);
+  } finally {
+    window.requestAnimationFrame(() => {
+      hideLoadingOverlay();
+      queueTileReflow();
+    });
   }
 });
