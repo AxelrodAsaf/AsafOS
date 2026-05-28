@@ -156,45 +156,15 @@ a {
   display: grid;
   position: relative;
   justify-content: center;
-  grid-template-columns: repeat(5, var(--unit));
+  grid-template-columns: repeat(var(--grid-columns, 5), var(--unit));
   grid-auto-rows: var(--unit);
   grid-auto-flow: dense;
   grid-gap: var(--grid-gap);
-  width: calc((var(--unit) * 5) + (var(--grid-gap) * 4));
+  width: calc(
+    (var(--unit) * var(--grid-columns, 5)) +
+    (var(--grid-gap) * (var(--grid-columns, 5) - 1))
+  );
   margin: 0 auto;
-}
-
-@media screen and (max-width: 1120px) {
-  main {
-    max-width: 800px;
-  }
-
-  .grid {
-    grid-template-columns: repeat(4, var(--unit));
-    width: calc((var(--unit) * 4) + (var(--grid-gap) * 3));
-  }
-}
-
-@media screen and (max-width: 890px) {
-  main {
-    max-width: 620px;
-  }
-
-  .grid {
-    grid-template-columns: repeat(3, var(--unit));
-    width: calc((var(--unit) * 3) + (var(--grid-gap) * 2));
-  }
-}
-
-@media screen and (max-width: 670px) {
-  main {
-    max-width: 440px;
-  }
-
-  .grid {
-    grid-template-columns: repeat(2, var(--unit));
-    width: calc((var(--unit) * 2) + var(--grid-gap));
-  }
 }
 
 .dark {

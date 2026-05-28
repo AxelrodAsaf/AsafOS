@@ -14,6 +14,11 @@ const defaultNewsImageFallback =
 
 let lastTilePositions = new Map();
 let tileReflowFrame = null;
+let tileResizeTimeoutId = null;
+let frozenGridFrame = null;
+const tileReflowStartDelayMs = 85;
+let currentGridColumns = 5;
+let currentTileWidth = 0;
 
 const getVisibleGridTiles = () => {
   const grid = document.getElementById("grid");
@@ -41,6 +46,71 @@ const captureTilePositions = () => {
   );
 };
 
+const getResponsiveGridColumns = (viewportWidth = window.innerWidth) => {
+  if (viewportWidth <= 670) {
+    return 2;
+  }
+
+  if (viewportWidth <= 890) {
+    return 3;
+  }
+
+  if (viewportWidth <= 1120) {
+    return 4;
+  }
+
+  return 5;
+};
+
+const applyResponsiveGridColumns = (columnCount) => {
+  const grid = document.getElementById("grid");
+
+  if (!grid) {
+    return;
+  }
+
+  grid.style.setProperty("--grid-columns", String(columnCount));
+};
+
+const getCurrentTileWidth = () => {
+  const firstTile = getVisibleGridTiles()[0];
+
+  if (!firstTile) {
+    return 0;
+  }
+
+  return Math.round(firstTile.getBoundingClientRect().width);
+};
+
+const freezeGridFrame = () => {
+  const grid = document.getElementById("grid");
+
+  if (!grid) {
+    return;
+  }
+
+  const rect = grid.getBoundingClientRect();
+  frozenGridFrame = {
+    width: rect.width,
+    height: rect.height
+  };
+
+  grid.style.width = `${rect.width}px`;
+  grid.style.height = `${rect.height}px`;
+};
+
+const releaseGridFrame = () => {
+  const grid = document.getElementById("grid");
+
+  if (!grid) {
+    return;
+  }
+
+  grid.style.width = "";
+  grid.style.height = "";
+  frozenGridFrame = null;
+};
+
 const animateTileReflow = () => {
   const nextPositions = captureTilePositions();
 
@@ -63,17 +133,19 @@ const animateTileReflow = () => {
 
     tile.getBoundingClientRect();
 
-    window.requestAnimationFrame(() => {
-      tile.style.transition = "transform 360ms cubic-bezier(0.22, 1, 0.36, 1)";
-      tile.style.transform = "";
+    window.setTimeout(() => {
+      window.requestAnimationFrame(() => {
+        tile.style.transition = "transform 320ms cubic-bezier(0.2, 0.9, 0.25, 1.15)";
+        tile.style.transform = "";
 
-      const clearTransition = () => {
-        tile.style.transition = "";
-        tile.removeEventListener("transitionend", clearTransition);
-      };
+        const clearTransition = () => {
+          tile.style.transition = "";
+          tile.removeEventListener("transitionend", clearTransition);
+        };
 
-      tile.addEventListener("transitionend", clearTransition);
-    });
+        tile.addEventListener("transitionend", clearTransition);
+      });
+    }, tileReflowStartDelayMs);
   });
 
   lastTilePositions = nextPositions;
@@ -86,13 +158,42 @@ const queueTileReflow = () => {
 
   tileReflowFrame = window.requestAnimationFrame(() => {
     tileReflowFrame = null;
+    releaseGridFrame();
     animateTileReflow();
   });
 };
 
 const initializeTileReflow = () => {
+  currentGridColumns = getResponsiveGridColumns();
+  applyResponsiveGridColumns(currentGridColumns);
   lastTilePositions = captureTilePositions();
-  window.addEventListener("resize", queueTileReflow);
+  currentTileWidth = getCurrentTileWidth();
+
+  window.addEventListener("resize", () => {
+    const nextGridColumns = getResponsiveGridColumns();
+    const nextTileWidth = getCurrentTileWidth();
+
+    if (
+      nextGridColumns === currentGridColumns &&
+      nextTileWidth === currentTileWidth
+    ) {
+      return;
+    }
+
+    if (tileResizeTimeoutId === null) {
+      lastTilePositions = captureTilePositions();
+      freezeGridFrame();
+    }
+
+    window.clearTimeout(tileResizeTimeoutId);
+    tileResizeTimeoutId = window.setTimeout(() => {
+      tileResizeTimeoutId = null;
+      currentGridColumns = getResponsiveGridColumns();
+      applyResponsiveGridColumns(currentGridColumns);
+      currentTileWidth = getCurrentTileWidth();
+      queueTileReflow();
+    }, 40);
+  });
 };
 
 const hideLoadingOverlay = () => {
