@@ -404,6 +404,8 @@ button {
   color: #ffffff;
   height: 100%;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .github-logo {
@@ -420,6 +422,8 @@ button {
   align-items: center;
   gap: 0.9rem;
   height: auto;
+  position: relative;
+  z-index: 2;
 }
 
 .github-link {
@@ -433,6 +437,41 @@ button {
   margin: 0;
   color: rgba(117, 117, 117, 0.75);
   font-size: x-small;
+}
+
+.github-chart-shell {
+  position: absolute;
+  left: 0.55rem;
+  right: 0.55rem;
+  bottom: 0.35rem;
+  height: 20%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.github-activity-chart {
+  width: 100%;
+  height: 100%;
+}
+
+.github-activity-axis {
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 0.8;
+  vector-effect: non-scaling-stroke;
+}
+
+.github-activity-area {
+  fill: url(#github-chart-fill);
+  opacity: 0.5;
+}
+
+.github-activity-line {
+  fill: none;
+  stroke: #69db7c;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
 .education-tile {
@@ -863,8 +902,9 @@ button {
 }
 
 #spotify-artists-table td {
-  text-align: center;
+  text-align: left;
   font-size: 0.9em;
+  vertical-align: middle;
 }
 
 #spotify-artists-table td img {
@@ -874,9 +914,25 @@ button {
   object-fit: cover;
 }
 
+#spotify-artists-table td:first-child {
+  width: 66px;
+  flex: 0 0 66px;
+}
+
+#spotify-artists-table td:last-child {
+  flex: 1 1 auto;
+  padding-left: 0.35rem;
+}
+
 #spotify-artists-table td a,
 #spotify-songs-table td a {
   color: var(--spotify-song-text);
+}
+
+#spotify-artists-table td a {
+  display: block;
+  text-align: left;
+  line-height: 1.08;
 }
 
 #spotify-songs-list {
@@ -938,8 +994,8 @@ button {
 }
 
 #spotify-songs-tile {
-  width: 97%;
-  height: 94%;
+  width: 100%;
+  height: 100%;
   padding: 10px 14px;
   display: grid;
   grid-template-columns: 44% minmax(0, 1fr);
@@ -1154,12 +1210,12 @@ button {
   justify-content: flex-start;
   align-items: stretch;
   overflow: hidden;
-  background: linear-gradient(180deg, #251712 0%, #120d0b 100%);
+  background: #ffffff;
   color: #ffffff;
 }
 
 .dark #strava-activity-tile {
-  background: linear-gradient(180deg, #1b110d 0%, #080707 100%);
+  background: #000000;
   color: #f5f5f5;
 }
 
@@ -1233,18 +1289,17 @@ button {
 
 .strava-activity-chart-shell {
   position: absolute;
-  inset: 0.65rem 1rem 4.85rem;
+  inset: 4.05rem 1rem 3.15rem 1rem;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%),
-    linear-gradient(180deg, rgba(10, 10, 11, 0.88) 0%, rgba(22, 14, 12, 0.92) 100%);
-  border-radius: 18px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    linear-gradient(180deg, rgba(250, 250, 250, 0.98) 0%, rgba(236, 236, 236, 0.98) 100%);
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
 
 .dark .strava-activity-chart-shell {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%),
-    linear-gradient(180deg, rgba(4, 4, 5, 0.96) 0%, rgba(16, 11, 10, 0.98) 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0) 22%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.52) 100%);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
@@ -1257,7 +1312,7 @@ button {
 
 .strava-activity-area {
   fill: url(#strava-chart-fill);
-  opacity: 0.25;
+  opacity: 0.28;
 }
 
 .strava-activity-line {
@@ -1271,7 +1326,7 @@ button {
 
 .strava-activity-axis-line,
 .strava-activity-tick-mark {
-  stroke: rgba(255, 255, 255, 0.28);
+  stroke: rgba(70, 70, 70, 0.36);
   stroke-width: 0.55;
   vector-effect: non-scaling-stroke;
 }
@@ -1279,7 +1334,7 @@ button {
 .strava-activity-reference-line {
   stroke: rgba(217, 43, 43, 0.55);
   stroke-width: 0.55;
-  stroke-dasharray: 1.8 1.8;
+  stroke-dasharray: 2.8 1.6;
   vector-effect: non-scaling-stroke;
 }
 
@@ -1293,10 +1348,13 @@ button {
 }
 
 .strava-activity-tick-label {
-  fill: rgba(255, 255, 255, 0.78);
-  font-size: 4px;
+  fill: rgba(70, 70, 70, 0.92);
+  font-size: 3.7px;
   font-weight: 700;
   letter-spacing: 0.04em;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scaleX(0.76);
 }
 
 .dark .strava-activity-tick-label {
@@ -1304,9 +1362,12 @@ button {
 }
 
 .strava-activity-y-label {
-  fill: rgba(255, 255, 255, 0.78);
-  font-size: 3.8px;
+  fill: rgba(70, 70, 70, 0.92);
+  font-size: 3.4px;
   font-weight: 700;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scaleX(0.82);
 }
 
 .dark .strava-activity-y-label {
@@ -1327,7 +1388,9 @@ button {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 24%);
+  background:
+    linear-gradient(180deg, rgba(252, 82, 0, 0.72) 0%, rgba(252, 82, 0, 0.36) 18%, rgba(252, 82, 0, 0) 38%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 26%);
   pointer-events: none;
 }
 
@@ -1337,10 +1400,10 @@ button {
 
 .strava-activity-hr-label {
   position: absolute;
-  top: 5rem;
-  left: 1.35rem;
+  top: 4.85rem;
+  left: 1.45rem;
   z-index: 3;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   line-height: 1;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -1354,9 +1417,9 @@ button {
 
 .strava-activity-drag-surface {
   position: absolute;
-  inset: 0.65rem 1rem 4.85rem;
+  inset: 4.05rem 1rem 3.15rem 1rem;
   z-index: 2;
-  border-radius: 18px;
+  border-radius: 16px;
 }
 
 .strava-topbar,
@@ -1394,6 +1457,24 @@ button {
   color: #ffffff;
 }
 
+#strava-activity-tile .strava-topbar {
+  padding-bottom: 2.6rem;
+}
+
+.strava-activity-title {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.strava-activity-title-type {
+  font-size: 0.58em;
+  font-weight: 500;
+  opacity: 0.88;
+  letter-spacing: 0;
+}
+
 .strava-stats {
   position: absolute;
   left: 1rem;
@@ -1418,7 +1499,7 @@ button {
 }
 
 #strava-activity-tile .strava-stat {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(44, 44, 46, 0.86);
 }
 
 #strava-activity-tile .strava-stat-label {

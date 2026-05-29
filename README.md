@@ -1,40 +1,46 @@
 # AsafOS Frontend
 
-Frontend for AsafOS.
+AsafOS is the frontend for [asafos.netlify.app](https://asafos.netlify.app/frontend/), a personal resume/portfolio site built as a tile-based interface.
 
-This repo contains the original-style tile-based portfolio UI, image assets, and local fallback JSON data.
+Instead of a standard resume page, the site presents experience, education, music, reading, maps, and live integrations as a grid of interactive tiles. The goal is to feel personal and memorable while still functioning as a concise professional snapshot.
 
-## Structure
+## What This Repo Contains
 
-- `index.html`
-- `styles.css`
-- `javascript/main.js`
-- `javascript/config.js`
-- `javascript/services/`
-- `javascript/layout/`
-- `javascript/features/`
-- `assets/`
-- `recentSongs.json`
-- `topArtists.json`
-- `newsArticles.json`
+- The tile-based website UI
+- Static assets and images
+- Frontend rendering logic for Spotify, Goodreads, Strava, GitHub, news, maps, audio, and resume content
+- Local fallback JSON files used when live backend data is unavailable
 
-## Local Run
+## Live Site
+
+- Website: [https://asafos.netlify.app/frontend/](https://asafos.netlify.app/frontend/)
+
+## How It Works
+
+The frontend is intentionally lightweight:
+
+- `index.html` defines the tile layout
+- `styles.css` defines the visual system and responsive behavior
+- `javascript/` is split by responsibility:
+  - `features/` for tile-specific behavior
+  - `services/` for API helpers
+  - `layout/` for grid/reflow behavior
+  - `config.js` for shared frontend configuration
+  - `main.js` as the boot/orchestration layer
+
+Most live data comes from the backend service on Render. If that backend is unavailable, some tiles can fall back to local JSON.
+
+## Running Locally
 
 ```bash
 cd "/Users/asafaxelrod/Desktop/AsafOS - Codex/frontend"
 python3 -m http.server 8080
 ```
 
-Then open `http://localhost:8080`.
+Then open [http://localhost:8080](http://localhost:8080).
 
 ## Notes
 
-- The UI is intentionally close to the original AsafOS design.
-- The frontend uses `https://asafos-backend.onrender.com` as its backend in both local and deployed use, unless `window.ASAFOS_BACKEND_URL` is explicitly overridden before `javascript/main.js` loads.
-- In production, the frontend fetches Spotify, N12 RSS, map config, and the optional resume PDF tile from the backend.
-- If the backend is unavailable, the frontend falls back to the local JSON files for Spotify and news content.
-- Tile behavior is now organized by feature so future tiles can follow the same pattern:
-  - fetch in `services/`
-  - feature rendering in `features/`
-  - shared layout behavior in `layout/`
-- The workspace-level TODO is kept at `/Users/asafaxelrod/Desktop/AsafOS - Codex/TODO.md`, not inside this repo.
+- The visual direction intentionally stays close to the original AsafOS look.
+- The frontend expects the backend to provide live Spotify, Strava, Goodreads, map, news, and config data.
+- This repo is primarily maintained as the source for Asaf’s portfolio site, not as a general-purpose frontend starter.

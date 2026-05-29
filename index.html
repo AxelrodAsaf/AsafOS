@@ -97,6 +97,24 @@
         </div>
 
         <div class="tile" id="github-tile">
+          <div class="github-chart-shell" aria-hidden="true">
+            <svg
+              class="github-activity-chart"
+              id="github-activity-chart"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id="github-chart-fill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgba(76, 175, 80, 0.35)"></stop>
+                  <stop offset="100%" stop-color="rgba(76, 175, 80, 0)"></stop>
+                </linearGradient>
+              </defs>
+              <line id="github-activity-axis" class="github-activity-axis"></line>
+              <path id="github-activity-area" class="github-activity-area"></path>
+              <path id="github-activity-line" class="github-activity-line"></path>
+            </svg>
+          </div>
           <div class="github-information">
             <div class="github-info1">
               <a target="_blank" rel="noreferrer" href="https://github.com/AxelrodAsaf/" class="tile-link-focus github-link" id="github-link" aria-label="Open GitHub profile">
@@ -254,7 +272,6 @@
         </defs>
         <path id="strava-activity-area" class="strava-activity-area"></path>
         <line id="strava-activity-avg-line" class="strava-activity-reference-line"></line>
-        <line id="strava-activity-max-line" class="strava-activity-reference-line"></line>
         <line id="strava-activity-axis-y" class="strava-activity-axis-line"></line>
         <line id="strava-activity-axis-x" class="strava-activity-axis-line"></line>
         <g id="strava-activity-axis-y-labels" class="strava-activity-axis-y-labels"></g>
@@ -270,7 +287,10 @@
             class="strava-topbar tile-link-focus"
             id="strava-activity-topbar-link"
           >
-            <span class="strava-label">Latest Activity</span>
+            <span class="strava-label strava-activity-title">
+              <span class="strava-activity-title-main">Latest Activity</span>
+              <span class="strava-activity-title-type" id="strava-activity-title-type"></span>
+            </span>
             <i class="fa-brands fa-strava" aria-hidden="true"></i>
           </a>
           <div class="strava-stats strava-activity-stats">

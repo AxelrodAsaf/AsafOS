@@ -123,8 +123,8 @@ const buildChartGeometry = (points) => {
   const heartRateRange = Math.max(1, maxHeartRate - minHeartRate);
   const left = 10;
   const right = 92;
-  const top = 22;
-  const bottom = 68;
+  const top = 14;
+  const bottom = 84;
 
   const coordinates = points.map((point) => {
     const x = left + ((point.timeSeconds - minTime) / timeRange) * (right - left);
@@ -152,8 +152,9 @@ const buildChartGeometry = (points) => {
     };
   });
 
-  const yLabels = Array.from({ length: 3 }, (_, index) => {
-    const ratio = index / 2;
+  const yTickCount = 5;
+  const yLabels = Array.from({ length: yTickCount }, (_, index) => {
+    const ratio = index / Math.max(1, yTickCount - 1);
     const heartRate = Math.round(maxHeartRate - ratio * heartRateRange);
     const y = top + ratio * (bottom - top);
 
@@ -218,7 +219,7 @@ export const updateStravaActivityTile = (activity) => {
   const ticksGroup = document.getElementById("strava-activity-axis-ticks");
   const yLabelsGroup = document.getElementById("strava-activity-axis-y-labels");
   const avgLineElement = document.getElementById("strava-activity-avg-line");
-  const maxLineElement = document.getElementById("strava-activity-max-line");
+  const titleTypeElement = document.getElementById("strava-activity-title-type");
 
   if (
     xAxis &&
@@ -227,8 +228,7 @@ export const updateStravaActivityTile = (activity) => {
     yAxisElement &&
     ticksGroup &&
     yLabelsGroup &&
-    avgLineElement &&
-    maxLineElement
+    avgLineElement
   ) {
     xAxisElement.setAttribute("x1", xAxis.x1);
     xAxisElement.setAttribute("y1", xAxis.y1);
@@ -244,9 +244,7 @@ export const updateStravaActivityTile = (activity) => {
       bottom - ((heartRate - minHeartRate) / heartRateRange) * (bottom - top);
 
     const averageHeartRate = Number(activity.averageHeartRate);
-    const maxHeartRate = Number(activity.maxHeartRate);
     const avgY = Number.isFinite(averageHeartRate) ? toChartY(averageHeartRate) : null;
-    const maxY = Number.isFinite(maxHeartRate) ? toChartY(maxHeartRate) : null;
 
     const setReferenceLine = (element, y) => {
       if (!Number.isFinite(y)) {
@@ -264,7 +262,6 @@ export const updateStravaActivityTile = (activity) => {
     };
 
     setReferenceLine(avgLineElement, avgY);
-    setReferenceLine(maxLineElement, maxY);
 
     ticksGroup.innerHTML = ticks
       .map(
@@ -284,12 +281,9 @@ export const updateStravaActivityTile = (activity) => {
       .join("");
   }
 
-  const label = activity.sportType
-    ? `Latest Activity (${activity.sportType})`
-    : "Latest Activity";
-  const labelElement = document.querySelector("#strava-activity-topbar-link .strava-label");
-
-  if (labelElement) {
-    labelElement.textContent = label;
+  if (titleTypeElement) {
+    titleTypeElement.textContent = activity.sportType
+      ? `(${activity.sportType})`
+      : "";
   }
 };
