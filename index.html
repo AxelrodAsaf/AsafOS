@@ -70,11 +70,12 @@
           </p>
         </div>
 
-        <a target="_blank" href="https://github.com/AxelrodAsaf/" class="tile" id="github-tile">
-          <i class="selection fa-brands fa-github github-logo" id="github-avatar"></i>
+        <div class="tile" id="github-tile">
           <div class="github-information">
             <div class="github-info1">
-              <h2 class="github-username" id="github-username"></h2>
+              <a target="_blank" rel="noreferrer" href="https://github.com/AxelrodAsaf/" class="tile-link-focus github-link" id="github-link" aria-label="Open GitHub profile">
+                <i class="selection fa-brands fa-github github-logo" id="github-avatar"></i>
+              </a>
             </div>
             <div class="github-info2">
               <h4 class="github-followers" id="github-followers"></h4>
@@ -82,10 +83,12 @@
               <h4 class="github-repos" id="github-repos"></h4>
             </div>
           </div>
-        </a>
+        </div>
 
-        <a target="_blank" href="https://www.spotify.com/" class="spotify-tile tile long-tile" id="spotify-songs-tile" hidden>
-          <img id="spotify-album-art" src="./assets/SPOTIFY.png" alt="Album Cover" />
+        <div class="spotify-tile tile long-tile" id="spotify-songs-tile" hidden>
+          <a target="_blank" rel="noreferrer" href="https://www.spotify.com/" class="tile-link-focus spotify-art-link" id="spotify-art-link">
+            <img id="spotify-album-art" src="./assets/SPOTIFY.png" alt="Album Cover" />
+          </a>
           <div class="spotify-songs-right">
             <div class="spotify-songs-right-top">
               <div class="spotify-lastplayed-container">
@@ -96,41 +99,58 @@
                 </div>
                 <h5 class="spotify-lastplayed-text">Last Played</h5>
               </div>
-              <i class="fa-brands fa-spotify" id="spotify-songs-logo"></i>
+              <a target="_blank" rel="noreferrer" href="https://www.spotify.com/" class="tile-link-focus spotify-logo-link" id="spotify-logo-link">
+                <i class="fa-brands fa-spotify" id="spotify-songs-logo"></i>
+              </a>
             </div>
-            <div class="spotify-songs-right-bottom">
-              <h4 class="spotify-song-title">Wet Dreamz</h4>
-              <h5 class="spotify-song-artist">J. Cole</h5>
-            </div>
+            <a target="_blank" rel="noreferrer" href="https://www.spotify.com/" class="tile-link-focus spotify-track-link" id="spotify-track-link">
+              <div class="spotify-songs-right-bottom">
+                <h4 class="spotify-song-title">Wet Dreamz</h4>
+                <h5 class="spotify-song-artist">J. Cole</h5>
+              </div>
+            </a>
             <div class="spacing-div-dont-delete"></div>
           </div>
-        </a>
+        </div>
 
-        <a
-          target="_blank"
-          rel="noreferrer"
-          href="https://www.goodreads.com/user/show/200705407-asaf-axelrod"
-          class="tile"
-          id="goodreads-current-tile"
-          hidden
-        >
+        <div class="tile" id="goodreads-current-tile" hidden>
           <div class="goodreads-current-header">Currently Reading</div>
-          <img id="goodreads-current-cover" alt="Current Goodreads book cover" />
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.goodreads.com/user/show/200705407-asaf-axelrod"
+            class="tile-link-focus goodreads-cover-link"
+            id="goodreads-current-cover-link"
+          >
+            <img id="goodreads-current-cover" alt="Current Goodreads book cover" />
+          </a>
           <div class="goodreads-current-content">
-            <h4 id="goodreads-current-title"></h4>
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://www.goodreads.com/user/show/200705407-asaf-axelrod"
+              class="tile-link-focus goodreads-title-link"
+              id="goodreads-current-title-link"
+            >
+              <h4 id="goodreads-current-title"></h4>
+            </a>
             <p id="goodreads-current-author"></p>
           </div>
-        </a>
+        </div>
 
-        <a target="_blank" href="https://www.cyberpro-israel.co.il/" class="tile education-tile">
+        <div class="tile education-tile">
           <h1>FullStack</h1>
-          <img id="cyberpro-img" src="./assets/CYBERPRO.svg" alt="CyberPro logo" />
-        </a>
+          <a target="_blank" rel="noreferrer" href="https://www.cyberpro-israel.co.il/" class="tile-link-focus image-link">
+            <img id="cyberpro-img" src="./assets/CYBERPRO.svg" alt="CyberPro logo" />
+          </a>
+        </div>
 
-        <a target="_blank" href="https://www.colman.ac.il/" class="tile education-tile">
+        <div class="tile education-tile">
           <h1>B.Sc. Comp. Sci.</h1>
-          <img id="colman-img" src="./assets/COLMAN.png" alt="College logo" />
-        </a>
+          <a target="_blank" rel="noreferrer" href="https://www.colman.ac.il/" class="tile-link-focus image-link">
+            <img id="colman-img" src="./assets/COLMAN.png" alt="College logo" />
+          </a>
+        </div>
 
         <div class="tile" id="employment">
           <div>
@@ -144,23 +164,24 @@
           </div>
         </div>
 
-        <a target="_blank" href="https://www.linkedin.com/in/asaf-axelrod-9353b1ba" class="tile social" id="linkedin-tile">
-          <i class="fa-brands fa-linkedin-in" id="linkedin-pic"></i>
-        </a>
+        <div class="tile social" id="linkedin-tile">
+          <a target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/asaf-axelrod-9353b1ba" class="tile-link-focus social-logo-link">
+            <i class="fa-brands fa-linkedin-in" id="linkedin-pic"></i>
+          </a>
+        </div>
 
-        <a
-          target="_blank"
-          rel="noreferrer"
-          href="https://www.strava.com/"
-          class="tile large-tile"
-          id="strava-tile"
-          hidden
-        >
+        <div class="tile large-tile" id="strava-tile" hidden>
           <div class="strava-map" id="strava-map"></div>
-          <div class="strava-topbar">
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.strava.com/"
+            class="strava-topbar tile-link-focus"
+            id="strava-topbar-link"
+          >
             <span class="strava-label">Latest Run</span>
             <i class="fa-brands fa-strava" aria-hidden="true"></i>
-          </div>
+          </a>
           <div class="strava-stats">
             <div class="strava-stat">
               <span class="strava-stat-label">Distance</span>
@@ -175,9 +196,9 @@
               <span class="strava-stat-value" id="strava-pace">--</span>
             </div>
           </div>
-        </a>
+        </div>
 
-        <div class="tile large-tile">
+        <div class="tile large-tile gallery-tile">
           <div class="carousel-container">
             <div class="carousel">
               <div class="img-container">
@@ -225,8 +246,18 @@
           </div>
         </div>
 
-        <div class="tile long-tile" id="map-seattle" hidden></div>
-        <div class="tile long-tile" id="map-herzliya" hidden></div>
+        <div class="tile long-tile map-tile" id="map-seattle-tile" hidden>
+          <div class="map-frame">
+            <div class="map-canvas" id="map-seattle"></div>
+            <div class="map-label"><strong>Bellevue</strong></div>
+          </div>
+        </div>
+        <div class="tile long-tile map-tile" id="map-herzliya-tile" hidden>
+          <div class="map-frame">
+            <div class="map-canvas" id="map-herzliya"></div>
+            <div class="map-label"><strong>Herzliya</strong></div>
+          </div>
+        </div>
 
         <div class="spotify-tile tile tall-tile" id="spotify-artists-tile" hidden>
           <div class="spotify-artists-header">
@@ -240,19 +271,24 @@
           </div>
         </div>
 
-        <a target="_blank" href="https://www.instagram.com/asafaxelrod" class="tile social" id="instagram-tile">
-          <i class="fa-brands fa-instagram" id="instagram-pic"></i>
-          <p style="color: white">AsafAxelrod</p>
-        </a>
+        <div class="tile social" id="instagram-tile">
+          <a target="_blank" rel="noreferrer" href="https://www.instagram.com/asafaxelrod" class="tile-link-focus social-logo-link">
+            <i class="fa-brands fa-instagram" id="instagram-pic"></i>
+          </a>
+        </div>
 
-        <a target="_blank" href="https://www.facebook.com/axelrodasaf" class="tile social" id="facebook-tile">
-          <i class="fa-brands fa-facebook-f" id="facebook-pic"></i>
-        </a>
+        <div class="tile social" id="facebook-tile">
+          <a target="_blank" rel="noreferrer" href="https://www.facebook.com/axelrodasaf" class="tile-link-focus social-logo-link">
+            <i class="fa-brands fa-facebook-f" id="facebook-pic"></i>
+          </a>
+        </div>
 
         <div class="tile" id="galgalatz">
           <h1>גלגל"צ</h1>
-          <i class="fa-solid fa-circle-play glglz-toggle" id="glglz-play-icon"></i>
-          <i class="fa-solid fa-circle-pause glglz-toggle" id="glglz-pause-icon" style="display: none"></i>
+          <button type="button" class="tile-link-focus glglz-button" id="galgalatz-toggle-button" aria-label="Play or pause Galgalatz">
+            <i class="fa-solid fa-circle-play glglz-toggle" id="glglz-play-icon"></i>
+            <i class="fa-solid fa-circle-pause glglz-toggle" id="glglz-pause-icon" style="display: none"></i>
+          </button>
         </div>
         <audio
           id="audio-player"

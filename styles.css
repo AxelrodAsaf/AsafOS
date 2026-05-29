@@ -152,6 +152,15 @@ a {
   color: inherit;
 }
 
+button {
+  font: inherit;
+}
+
+.tile-link-focus {
+  color: inherit;
+  text-decoration: none;
+}
+
 .grid {
   display: grid;
   position: relative;
@@ -379,19 +388,22 @@ a {
   color: #ffffff;
   font-size: 35px;
   position: relative;
-  top: 15px;
+  top: 0;
 }
 
 .github-information {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  height: 40%;
+  gap: 0.9rem;
+  height: auto;
 }
 
-.github-username {
-  margin: 0;
+.github-link {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .github-info2 * {
@@ -407,6 +419,13 @@ a {
   justify-content: space-evenly;
   align-items: center;
   font-size: 10px;
+}
+
+.image-link {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #cyberpro-img {
@@ -439,6 +458,12 @@ a {
   max-width: 100%;
 }
 
+#work-pictures a {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .leaflet-control-container {
   display: none;
 }
@@ -448,6 +473,12 @@ a {
   height: 100%;
   position: relative;
   display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-logo-link {
+  display: inline-flex;
   justify-content: center;
   align-items: center;
 }
@@ -469,10 +500,6 @@ a {
 
 #instagram-tile {
   background: linear-gradient(25deg, #fcb045, #fd1d1d, #833ab4);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 #resume-tile {
@@ -534,6 +561,17 @@ a {
   margin-top: 0;
   width: 100%;
   min-height: 0;
+}
+
+.goodreads-cover-link,
+.goodreads-title-link {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.goodreads-title-link {
+  width: 100%;
 }
 
 #goodreads-current-title {
@@ -876,45 +914,80 @@ a {
 #spotify-songs-tile {
   width: 97%;
   height: 94%;
-  padding: 5px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: 44% minmax(0, 1fr);
+  column-gap: 1rem;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.spotify-art-link,
+.spotify-logo-link,
+.spotify-track-link {
+  color: inherit;
+}
+
+.spotify-art-link {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin-left: 0;
+}
+
+.spotify-logo-link {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-flex;
+  justify-content: center;
   align-items: center;
 }
 
+.spotify-track-link {
+  display: block;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  right: 0;
+   top: 56%;
+  transform: translateY(-50%);
+}
+
 #spotify-album-art {
-  max-width: 40%;
+  width: 100%;
+  max-width: 100%;
   aspect-ratio: 1;
   object-fit: cover;
   border-radius: 10px;
-  margin: 13px;
+  margin: 0;
 }
 
 .spotify-songs-right {
-  flex-grow: 1;
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
   height: 100%;
+  min-width: 0;
+  padding-right: 54px;
+  box-sizing: border-box;
 }
 
 #spotify-songs-logo {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   font-size: 30px;
   color: var(--spotify-text);
 }
 
 .spotify-songs-right-top {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   width: 100%;
-  padding-top: 10%;
+  padding-top: 8px;
   margin: 0;
 }
 
@@ -931,15 +1004,23 @@ a {
 }
 
 .spotify-song-title {
-  margin: 5px 0;
+  margin: 0;
   color: var(--spotify-song-text);
-  font-size: 1.2em;
+  font-size: 1.28em;
+  line-height: 1.08;
 }
 
 .spotify-song-artist {
-  margin: 5px 0;
+  margin: 0.35rem 0 0;
   color: var(--spotify-tertiary-text-color);
-  font-size: 1em;
+  font-size: 1.02em;
+  line-height: 1.05;
+}
+
+.spotify-songs-right-bottom {
+  text-align: left;
+  width: 100%;
+  max-width: 100%;
 }
 
 #spotify1,
@@ -1003,6 +1084,21 @@ a {
   font-size: 2rem;
 }
 
+.glglz-button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.gallery-tile {
+  position: relative;
+}
+
 #news-list {
   width: 100%;
   background: var(--news-header-background);
@@ -1024,6 +1120,63 @@ a {
   overflow: hidden;
   background: linear-gradient(180deg, #251712 0%, #120d0b 100%);
   color: #ffffff;
+}
+
+.map-tile {
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 0.3rem;
+  box-sizing: border-box;
+  gap: 0;
+  position: relative;
+  overflow: visible;
+}
+
+.map-frame {
+  flex: 1;
+  min-height: 0;
+  border: 1px solid rgba(94, 125, 244, 0.28);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.55);
+  position: relative;
+  isolation: isolate;
+}
+
+.dark .map-frame {
+  border-color: rgba(138, 67, 208, 0.36);
+  background: rgba(29, 29, 29, 0.35);
+}
+
+.map-canvas {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.map-label {
+  position: absolute;
+  left: 50%;
+  bottom: 0.55rem;
+  transform: translateX(-50%);
+  min-width: 6.2rem;
+  max-width: calc(100% - 1rem);
+  padding: 0.24rem 0.9rem;
+  border-radius: 999px;
+  background: var(--tile-background-color);
+  border: 1px solid rgba(179, 92, 173, 0.34);
+  font-size: 0.78rem;
+  line-height: 1.15;
+  text-align: center;
+  color: var(--secondary-text-color);
+  z-index: 2;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .strava-map {
@@ -1050,18 +1203,19 @@ a {
 
 .strava-topbar {
   position: absolute;
-  top: 0.9rem;
-  left: 1rem;
-  right: 1rem;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0;
+  padding: 0.85rem 1rem 2.3rem;
+  background: linear-gradient(180deg, rgba(252, 82, 0, 0.78) 0%, rgba(252, 82, 0, 0.52) 48%, rgba(252, 82, 0, 0.18) 76%, rgba(252, 82, 0, 0) 100%);
 }
 
 .strava-topbar i {
   font-size: 1.5rem;
-  color: #fc5200;
+  color: #ffffff;
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
 

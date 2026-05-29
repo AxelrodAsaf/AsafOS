@@ -281,8 +281,6 @@ const updateGitHubCard = async () => {
 
   const profile = await response.json();
 
-  document.getElementById("github-username").textContent =
-    profile.login ?? "AxelrodAsaf";
   document.getElementById("github-followers").textContent =
     `Followers: ${profile.followers}`;
   document.getElementById("github-following").textContent =
@@ -290,14 +288,16 @@ const updateGitHubCard = async () => {
   document.getElementById("github-repos").textContent =
     `Repos: ${profile.public_repos}`;
 
-  document.getElementById("github-tile").href =
+  document.getElementById("github-link").href =
     profile.html_url ?? "https://github.com/AxelrodAsaf/";
 };
 
 const updateSpotifyHero = (song) => {
   const tile = document.getElementById("spotify-songs-tile");
   tile.hidden = false;
-  tile.href = song.spotifyUrl;
+  document.getElementById("spotify-art-link").href = song.spotifyUrl;
+  document.getElementById("spotify-logo-link").href = song.spotifyUrl;
+  document.getElementById("spotify-track-link").href = song.spotifyUrl;
   tile.querySelector(".spotify-song-title").textContent = song.trackName;
   tile.querySelector(".spotify-song-artist").textContent = song.artistName;
 
@@ -316,7 +316,12 @@ const updateResumeTile = (resumePdfUrl) => {
   const existingTile = document.getElementById("resume-tile");
 
   if (existingTile) {
-    existingTile.href = resumePdfUrl;
+    const downloadLink = existingTile.querySelector(".resume-download-link");
+
+    if (downloadLink) {
+      downloadLink.href = resumePdfUrl;
+    }
+
     const frame = existingTile.querySelector(".resume-preview-frame");
 
     if (frame) {
@@ -326,12 +331,9 @@ const updateResumeTile = (resumePdfUrl) => {
     return;
   }
 
-  const resumeTile = document.createElement("a");
+  const resumeTile = document.createElement("div");
   resumeTile.id = "resume-tile";
   resumeTile.className = "tile long-tile";
-  resumeTile.href = resumePdfUrl;
-  resumeTile.target = "_blank";
-  resumeTile.rel = "noreferrer";
   resumeTile.innerHTML = `
     <div class="resume-header">
       <h3 class="resume-header-text">Resume</h3>
@@ -343,9 +345,15 @@ const updateResumeTile = (resumePdfUrl) => {
         title="Resume preview"
         loading="lazy"
       ></iframe>
-      <div class="resume-download-overlay" aria-hidden="true">
+      <a
+        class="resume-download-overlay resume-download-link tile-link-focus"
+        href="${resumePdfUrl}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Download resume"
+      >
         <i class="fa-solid fa-file-arrow-down"></i>
-      </div>
+      </a>
     </div>
   `;
 
@@ -421,7 +429,9 @@ const updateGoodreadsCurrentBook = (book) => {
   }
 
   tile.hidden = false;
-  tile.href = book.link || tile.href;
+  const bookLink = book.link || "https://www.goodreads.com/user/show/200705407-asaf-axelrod";
+  document.getElementById("goodreads-current-cover-link").href = bookLink;
+  document.getElementById("goodreads-current-title-link").href = bookLink;
   document.getElementById("goodreads-current-cover").src = book.imageUrl;
   document.getElementById("goodreads-current-title").textContent = book.title;
   document.getElementById("goodreads-current-author").textContent = book.author;
@@ -555,7 +565,8 @@ const updateStravaTile = (activity, mapConfig, isDarkMode) => {
   }
 
   tile.hidden = false;
-  tile.href = activity.url ?? "https://www.strava.com/";
+  document.getElementById("strava-topbar-link").href =
+    activity.url ?? "https://www.strava.com/";
   document.getElementById("strava-distance").textContent =
     `${activity.distanceKilometers.toFixed(2)} km`;
   document.getElementById("strava-time").textContent =
@@ -697,11 +708,22 @@ const buildMap = (containerId, coordinates, zoom, mapConfig, isDarkMode) => {
     return null;
   }
 
-  container.hidden = false;
+  const tile = container.closest(".tile");
+
+  if (tile) {
+    tile.hidden = false;
+  }
 
   const map = window.L.map(containerId, {
     attributionControl: false,
-    zoomControl: false
+    zoomControl: false,
+    dragging: false,
+    doubleClickZoom: false,
+    scrollWheelZoom: false,
+    boxZoom: false,
+    keyboard: false,
+    touchZoom: false,
+    tap: false
   }).setView(coordinates, zoom);
 
   const layer = createTileLayer(mapConfig, isDarkMode);
@@ -710,8 +732,6 @@ const buildMap = (containerId, coordinates, zoom, mapConfig, isDarkMode) => {
     layer.addTo(map);
     container._leafletTileLayer = layer;
   }
-
-  window.L.marker(coordinates).addTo(map);
 
   return map;
 };
@@ -763,15 +783,33 @@ const initializeTheme = (maps, mapConfig) => {
 
 const initializeCarousel = () => {
   const carousel = document.querySelector(".carousel");
+  const galleryTile = document.querySelector(".gallery-tile");
 
-  if (!carousel) {
+  if (!carousel || !galleryTile) {
     return;
   }
 
   const slides = [...carousel.querySelectorAll(".img-container")];
   let activeIndex = 0;
+  let paused = false;
+
+  carousel.querySelectorAll("img").forEach((image) => {
+    image.draggable = false;
+  });
+
+  galleryTile.addEventListener("mouseenter", () => {
+    paused = true;
+  });
+
+  galleryTile.addEventListener("mouseleave", () => {
+    paused = false;
+  });
 
   setInterval(() => {
+    if (paused) {
+      return;
+    }
+
     activeIndex = (activeIndex + 1) % slides.length;
     carousel.scrollTo({
       left: slides[activeIndex].offsetLeft,
@@ -781,7 +819,7 @@ const initializeCarousel = () => {
 };
 
 const initializeAudioPlayer = () => {
-  const playPauseButton = document.getElementById("galgalatz");
+  const playPauseButton = document.getElementById("galgalatz-toggle-button");
   const playIcon = document.getElementById("glglz-play-icon");
   const pauseIcon = document.getElementById("glglz-pause-icon");
   const audioPlayer = document.getElementById("audio-player");
