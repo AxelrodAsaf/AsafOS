@@ -236,6 +236,59 @@
           </div>
         </div>
 
+  <div class="tile large-tile" id="strava-activity-tile" hidden>
+    <div class="strava-activity-chart-shell">
+      <span class="strava-activity-hr-label">HR</span>
+      <svg
+        class="strava-activity-chart"
+        id="strava-activity-chart"
+        viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="strava-chart-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(217, 43, 43, 0.36)"></stop>
+            <stop offset="100%" stop-color="rgba(217, 43, 43, 0)"></stop>
+          </linearGradient>
+        </defs>
+        <path id="strava-activity-area" class="strava-activity-area"></path>
+        <line id="strava-activity-avg-line" class="strava-activity-reference-line"></line>
+        <line id="strava-activity-max-line" class="strava-activity-reference-line"></line>
+        <line id="strava-activity-axis-y" class="strava-activity-axis-line"></line>
+        <line id="strava-activity-axis-x" class="strava-activity-axis-line"></line>
+        <g id="strava-activity-axis-y-labels" class="strava-activity-axis-y-labels"></g>
+        <g id="strava-activity-axis-ticks" class="strava-activity-axis-ticks"></g>
+        <path id="strava-activity-line" class="strava-activity-line"></path>
+      </svg>
+    </div>
+    <div class="strava-activity-drag-surface" aria-hidden="true"></div>
+    <a
+      target="_blank"
+      rel="noreferrer"
+            href="https://www.strava.com/"
+            class="strava-topbar tile-link-focus"
+            id="strava-activity-topbar-link"
+          >
+            <span class="strava-label">Latest Activity</span>
+            <i class="fa-brands fa-strava" aria-hidden="true"></i>
+          </a>
+          <div class="strava-stats strava-activity-stats">
+            <div class="strava-stat">
+              <span class="strava-stat-label">Time</span>
+              <span class="strava-stat-value" id="strava-activity-time">--</span>
+            </div>
+            <div class="strava-stat">
+              <span class="strava-stat-label">Avg. HR</span>
+              <span class="strava-stat-value" id="strava-activity-avg-hr">--</span>
+            </div>
+            <div class="strava-stat">
+              <span class="strava-stat-label">Max HR</span>
+              <span class="strava-stat-value" id="strava-activity-max-hr">--</span>
+            </div>
+          </div>
+        </div>
+
         <div id="spotify-songs-list" class="spotify-tile tile large-tile" hidden>
           <div class="spotify-songs-header">
             <h3 id="spotify-songs-header-text">Recently Played Songs</h3>

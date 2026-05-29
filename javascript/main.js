@@ -22,7 +22,10 @@ import {
 import { updateNews } from "./features/news.js";
 import { updateResumeTile } from "./features/resume.js";
 import { buildMap } from "./features/maps.js";
-import { updateStravaTile } from "./features/strava.js";
+import {
+  updateStravaActivityTile,
+  updateStravaTile
+} from "./features/strava.js";
 import { initializeTheme } from "./features/theme.js";
 import { initializeCarousel } from "./features/gallery.js";
 import { initializeAudioPlayer } from "./features/audio.js";
@@ -34,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initializeTileReflow();
 
   try {
-    const [config, songs, artists, articles, latestRun, goodreads] =
+    const [config, songs, artists, articles, latestRun, latestActivity, goodreads] =
       await Promise.all([
         loadConfig(),
         fetchWithFallback(
@@ -50,6 +53,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           "./newsArticles.json"
         ),
         fetchJson(`${backendBaseUrl}/api/strava/latest-run`).catch(() => null),
+        fetchJson(`${backendBaseUrl}/api/strava/latest-non-run`).catch(() => null),
         fetchJson(`${backendBaseUrl}/api/goodreads?limit=25`).catch(() => null)
       ]);
 
@@ -66,6 +70,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeTheme(maps, mapConfig);
     initializeCarousel();
     initializeAudioPlayer();
+    updateStravaActivityTile(latestActivity);
 
     if (songs.length > 0) {
       updateSpotifyHero(songs[0]);
