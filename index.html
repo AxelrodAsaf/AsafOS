@@ -70,6 +70,32 @@
           </p>
         </div>
 
+        <div class="tile education-tile">
+          <h1>B.Sc. Comp. Sci.</h1>
+          <a target="_blank" rel="noreferrer" href="https://www.colman.ac.il/" class="tile-link-focus image-link">
+            <img id="colman-img" src="./assets/COLMAN.png" alt="College logo" />
+          </a>
+        </div>
+
+        <div class="tile" id="employment">
+          <div>
+            <h1>Former</h1>
+            <h1>Employment</h1>
+          </div>
+          <div id="work-pictures">
+            <a target="_blank" href="https://www.matrix-globalservices.com/">
+              <img id="matrix-img" src="./assets/MATRIX.png" alt="Matrix Image" />
+            </a>
+          </div>
+        </div>
+
+        <div class="tile education-tile">
+          <h1>FullStack</h1>
+          <a target="_blank" rel="noreferrer" href="https://www.cyberpro-israel.co.il/" class="tile-link-focus image-link">
+            <img id="cyberpro-img" src="./assets/CYBERPRO.svg" alt="CyberPro logo" />
+          </a>
+        </div>
+
         <div class="tile" id="github-tile">
           <div class="github-information">
             <div class="github-info1">
@@ -81,6 +107,62 @@
               <h4 class="github-followers" id="github-followers"></h4>
               <h4 class="github-following" id="github-following"></h4>
               <h4 class="github-repos" id="github-repos"></h4>
+            </div>
+          </div>
+        </div>
+
+        <div class="tile social" id="linkedin-tile">
+          <a target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/asaf-axelrod-9353b1ba" class="tile-link-focus social-logo-link">
+            <i class="fa-brands fa-linkedin-in" id="linkedin-pic"></i>
+          </a>
+        </div>
+
+        <div class="tile" id="goodreads-current-tile" hidden>
+          <div class="goodreads-current-header">Currently Reading</div>
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://www.goodreads.com/user/show/200705407-asaf-axelrod"
+            class="tile-link-focus goodreads-cover-link"
+            id="goodreads-current-cover-link"
+          >
+            <img id="goodreads-current-cover" alt="Current Goodreads book cover" />
+          </a>
+          <div class="goodreads-current-content">
+            <a
+              target="_blank"
+              rel="noreferrer"
+              href="https://www.goodreads.com/user/show/200705407-asaf-axelrod"
+              class="tile-link-focus goodreads-title-link"
+              id="goodreads-current-title-link"
+            >
+              <h4 id="goodreads-current-title"></h4>
+            </a>
+            <p id="goodreads-current-author"></p>
+          </div>
+        </div>
+
+        <div class="tile large-tile gallery-tile">
+          <div class="carousel-container">
+            <div class="carousel">
+              <div class="img-container">
+                <img class="img" src="./assets/Asaf1.png" alt="Picture 1" />
+              </div>
+              <div class="img-container">
+                <img class="img" src="./assets/Asaf2.png" alt="Picture 2" />
+              </div>
+              <div class="img-container">
+                <img class="img" src="./assets/Asaf3.png" alt="Picture 3" />
+              </div>
+              <div class="img-container">
+                <img class="img" src="./assets/Asaf4.png" alt="Picture 4" />
+              </div>
+              <div class="img-container">
+                <img class="img" src="./assets/Asaf5.png" alt="Picture 5" />
+              </div>
+              <div class="img-container">
+                <img class="img" src="./assets/Asaf6.png" alt="Picture 6" />
+              </div>
             </div>
           </div>
         </div>
@@ -113,61 +195,17 @@
           </div>
         </div>
 
-        <div class="tile" id="goodreads-current-tile" hidden>
-          <div class="goodreads-current-header">Currently Reading</div>
-          <a
-            target="_blank"
-            rel="noreferrer"
-            href="https://www.goodreads.com/user/show/200705407-asaf-axelrod"
-            class="tile-link-focus goodreads-cover-link"
-            id="goodreads-current-cover-link"
-          >
-            <img id="goodreads-current-cover" alt="Current Goodreads book cover" />
-          </a>
-          <div class="goodreads-current-content">
-            <a
-              target="_blank"
-              rel="noreferrer"
-              href="https://www.goodreads.com/user/show/200705407-asaf-axelrod"
-              class="tile-link-focus goodreads-title-link"
-              id="goodreads-current-title-link"
-            >
-              <h4 id="goodreads-current-title"></h4>
-            </a>
-            <p id="goodreads-current-author"></p>
+        <div class="tile long-tile map-tile" id="map-seattle-tile" hidden>
+          <div class="map-frame">
+            <div class="map-canvas" id="map-seattle"></div>
+            <div class="map-label"><strong>Bellevue</strong></div>
           </div>
         </div>
-
-        <div class="tile education-tile">
-          <h1>FullStack</h1>
-          <a target="_blank" rel="noreferrer" href="https://www.cyberpro-israel.co.il/" class="tile-link-focus image-link">
-            <img id="cyberpro-img" src="./assets/CYBERPRO.svg" alt="CyberPro logo" />
-          </a>
-        </div>
-
-        <div class="tile education-tile">
-          <h1>B.Sc. Comp. Sci.</h1>
-          <a target="_blank" rel="noreferrer" href="https://www.colman.ac.il/" class="tile-link-focus image-link">
-            <img id="colman-img" src="./assets/COLMAN.png" alt="College logo" />
-          </a>
-        </div>
-
-        <div class="tile" id="employment">
-          <div>
-            <h1>Former</h1>
-            <h1>Employment</h1>
+        <div class="tile long-tile map-tile" id="map-herzliya-tile" hidden>
+          <div class="map-frame">
+            <div class="map-canvas" id="map-herzliya"></div>
+            <div class="map-label"><strong>Herzliya</strong></div>
           </div>
-          <div id="work-pictures">
-            <a target="_blank" href="https://www.matrix-globalservices.com/">
-              <img id="matrix-img" src="./assets/MATRIX.png" alt="Matrix Image" />
-            </a>
-          </div>
-        </div>
-
-        <div class="tile social" id="linkedin-tile">
-          <a target="_blank" rel="noreferrer" href="https://www.linkedin.com/in/asaf-axelrod-9353b1ba" class="tile-link-focus social-logo-link">
-            <i class="fa-brands fa-linkedin-in" id="linkedin-pic"></i>
-          </a>
         </div>
 
         <div class="tile large-tile" id="strava-tile" hidden>
@@ -198,31 +236,6 @@
           </div>
         </div>
 
-        <div class="tile large-tile gallery-tile">
-          <div class="carousel-container">
-            <div class="carousel">
-              <div class="img-container">
-                <img class="img" src="./assets/Asaf1.png" alt="Picture 1" />
-              </div>
-              <div class="img-container">
-                <img class="img" src="./assets/Asaf2.png" alt="Picture 2" />
-              </div>
-              <div class="img-container">
-                <img class="img" src="./assets/Asaf3.png" alt="Picture 3" />
-              </div>
-              <div class="img-container">
-                <img class="img" src="./assets/Asaf4.png" alt="Picture 4" />
-              </div>
-              <div class="img-container">
-                <img class="img" src="./assets/Asaf5.png" alt="Picture 5" />
-              </div>
-              <div class="img-container">
-                <img class="img" src="./assets/Asaf6.png" alt="Picture 6" />
-              </div>
-            </div>
-          </div>
-        </div>
-
         <div id="spotify-songs-list" class="spotify-tile tile large-tile" hidden>
           <div class="spotify-songs-header">
             <h3 id="spotify-songs-header-text">Recently Played Songs</h3>
@@ -246,19 +259,6 @@
           </div>
         </div>
 
-        <div class="tile long-tile map-tile" id="map-seattle-tile" hidden>
-          <div class="map-frame">
-            <div class="map-canvas" id="map-seattle"></div>
-            <div class="map-label"><strong>Bellevue</strong></div>
-          </div>
-        </div>
-        <div class="tile long-tile map-tile" id="map-herzliya-tile" hidden>
-          <div class="map-frame">
-            <div class="map-canvas" id="map-herzliya"></div>
-            <div class="map-label"><strong>Herzliya</strong></div>
-          </div>
-        </div>
-
         <div class="spotify-tile tile tall-tile" id="spotify-artists-tile" hidden>
           <div class="spotify-artists-header">
             <h3 id="spotify-artists-header-text">Top Artists</h3>
@@ -271,15 +271,15 @@
           </div>
         </div>
 
-        <div class="tile social" id="instagram-tile">
-          <a target="_blank" rel="noreferrer" href="https://www.instagram.com/asafaxelrod" class="tile-link-focus social-logo-link">
-            <i class="fa-brands fa-instagram" id="instagram-pic"></i>
-          </a>
-        </div>
-
         <div class="tile social" id="facebook-tile">
           <a target="_blank" rel="noreferrer" href="https://www.facebook.com/axelrodasaf" class="tile-link-focus social-logo-link">
             <i class="fa-brands fa-facebook-f" id="facebook-pic"></i>
+          </a>
+        </div>
+
+        <div class="tile social" id="instagram-tile">
+          <a target="_blank" rel="noreferrer" href="https://www.instagram.com/asafaxelrod" class="tile-link-focus social-logo-link">
+            <i class="fa-brands fa-instagram" id="instagram-pic"></i>
           </a>
         </div>
 

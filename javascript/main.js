@@ -28,6 +28,7 @@ import { initializeCarousel } from "./features/gallery.js";
 import { initializeAudioPlayer } from "./features/audio.js";
 import { hideLoadingOverlay } from "./features/loading.js";
 import { initializeAutoScroll } from "./features/autoscroll.js";
+import { initializeTileDrag } from "./features/drag.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   initializeTileReflow();
@@ -81,6 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     initializeAutoScroll("spotify-artists-container", 0.22);
     initializeAutoScroll("goodreads-ratings-scroll-container", 0.24);
     await updateGitHubCard();
+    initializeTileDrag();
     queueTileReflow();
   } catch (error) {
     console.error("Failed to initialize old-style UI:", error);

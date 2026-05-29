@@ -4,7 +4,7 @@ export const updateResumeTile = (resumePdfUrl) => {
   }
 
   const grid = document.getElementById("grid");
-  const insertionAnchor = document.getElementById("spotify-songs-tile");
+  const insertionAnchor = document.getElementById("employment");
   const existingTile = document.getElementById("resume-tile");
 
   if (existingTile) {

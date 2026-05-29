@@ -7,7 +7,7 @@ const tileReflowStartDelayMs = 85;
 let currentGridColumns = 5;
 let currentTileWidth = 0;
 
-const getVisibleGridTiles = () => {
+export const getVisibleGridTiles = () => {
   const grid = document.getElementById("grid");
 
   if (!grid) {
@@ -27,7 +27,7 @@ const getVisibleGridTiles = () => {
   });
 };
 
-const captureTilePositions = () => {
+export const captureTilePositions = () => {
   return new Map(
     getVisibleGridTiles().map((tile) => [tile, tile.getBoundingClientRect()])
   );
@@ -156,6 +156,10 @@ export const queueTileReflow = () => {
     releaseGridFrame();
     animateTileReflow();
   });
+};
+
+export const rememberTilePositions = () => {
+  lastTilePositions = captureTilePositions();
 };
 
 export const initializeTileReflow = () => {
