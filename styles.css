@@ -514,6 +514,10 @@ button {
   overflow: hidden;
 }
 
+.dark #resume-tile {
+  background: linear-gradient(145deg, #3a426c, #4b2c63);
+}
+
 #goodreads-current-tile,
 #goodreads-ratings-tile {
   background: var(--goodreads-background);
@@ -1177,6 +1181,11 @@ button {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.dark .map-label {
+  color: #ffffff;
+  background: rgba(44, 44, 46, 0.92);
 }
 
 .strava-map {
